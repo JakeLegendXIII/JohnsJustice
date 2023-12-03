@@ -22,7 +22,7 @@ namespace JohnsJustice.System
 			bool isPunchKeyPressed = keyboardState.IsKeyDown(Keys.Space);
 			bool wasPunchKeyPressed = _previousKeyboardState.IsKeyDown(Keys.Space);
 
-			if (!wasPunchKeyPressed && isPunchKeyPressed)
+			if (isPunchKeyPressed)
 			{
 				if (_player.State != PlayerState.Punching)
 				{

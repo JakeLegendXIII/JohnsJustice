@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Reflection.Metadata.Ecma335;
 
 namespace JohnsJustice.Entities
 {
@@ -30,7 +31,7 @@ namespace JohnsJustice.Entities
 			State = PlayerState.Idle;
 
 			Position = position;
-			// 13,34  and 65/64
+
 			_idleSprite1 = new Sprite(spriteSheet, 30, 14, 35, 50);
 			_idleSprite2 = new Sprite(spriteSheet, 128, 14, 31, 50);
 			_idleSprite3 = new Sprite(spriteSheet, 223, 16, 32, 50);
@@ -50,39 +51,40 @@ namespace JohnsJustice.Entities
 			_punchAnimation = new SpriteAnimation();
 			_punchAnimation.ShouldLoop = false;
 			_punchAnimation.AddFrame(_punchSprite1, 0);
-			_punchAnimation.AddFrame(_punchSprite2, 0.5f);
-			_punchAnimation.AddFrame(_punchSprite3, 1.2f);
+			_punchAnimation.AddFrame(_punchSprite2, 0.1f);
+			_punchAnimation.AddFrame(_punchSprite3, 0.4f);
+			_punchAnimation.AddFrame(_idleSprite1, 0.6f);
 			_punchAnimation.Play();
 
 		}
 
 		public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
 		{
-            if (State == PlayerState.Idle)
-            {
+			if (State == PlayerState.Idle)
+			{
 				_idleAnimation.Draw(spriteBatch, Position);
 			}
 			else if (State == PlayerState.Punching)
 			{
 				_punchAnimation.Draw(spriteBatch, Position);
-			}            
+			}
 		}
 
 		public void Update(GameTime gameTime)
 		{
 			if (State == PlayerState.Punching)
 			{
-               if (!_punchAnimation.IsPlaying)
+				_punchAnimation.Update(gameTime);
+
+				if (_punchAnimation.PlaybackProgress == 0 || _punchAnimation.IsPlaying == false)
 				{
 					State = PlayerState.Idle;
-					_idleAnimation.Play();
 				}
-                _punchAnimation.Update(gameTime);				
 			}
 			else if (State == PlayerState.Idle)
 			{
 				_idleAnimation.Update(gameTime);
-			}			
+			}
 		}
 
 		public bool BeginPunch()
