@@ -1,7 +1,11 @@
-﻿using JohnsJustice.Entities;
+﻿using JohnsJustice.Engine.Sound;
+using JohnsJustice.Entities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+using System.Collections.Generic;
 
 namespace JohnsJustice
 {
@@ -10,6 +14,8 @@ namespace JohnsJustice
 		private const string PLAYER_SPRITE_SHEET = "Sprites/player";
 		private const string ENEMY_SPRITE_SHEET = "Sprites/enemy-punk";
 		private const string ENEMY2_SPRITE_SHEET = "Sprites/enemy-punk2";
+		private const string MUSIC = "Music/NoSurvivors";
+		private const string MUSIC1 = "Music/CircuitBreaker";
 
 		public const int WINDOW_WIDTH = 600;
 		public const int WINDOW_HEIGHT = 150;
@@ -25,6 +31,10 @@ namespace JohnsJustice
 		private Texture2D _playerSpriteSheet;
 		private Texture2D _enemySpriteSheet;
 		private Texture2D _enemy2SpriteSheet;
+		private SoundEffect _music;
+		private SoundEffect _music1;
+
+		private SoundManager _soundManager;
 
 		public MainGame()
 		{
@@ -45,12 +55,21 @@ namespace JohnsJustice
 		}
 
 		protected override void LoadContent()
-		{
+		{		
+			_soundManager = new SoundManager();
+
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			_playerSpriteSheet = Content.Load<Texture2D>(PLAYER_SPRITE_SHEET);
 			_enemySpriteSheet = Content.Load<Texture2D>(ENEMY_SPRITE_SHEET);
 			_enemy2SpriteSheet = Content.Load<Texture2D>(ENEMY2_SPRITE_SHEET);
+
+			_music = Content.Load<SoundEffect>(MUSIC);
+			_music1 = Content.Load<SoundEffect>(MUSIC1);
+
+			var track1 = _music.CreateInstance();
+			var track2 = _music1.CreateInstance();
+			_soundManager.SetSoundtrack(new List<SoundEffectInstance>() { track1, track2 });
 
 			_player = new Player(_playerSpriteSheet, new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y));
 
@@ -62,6 +81,8 @@ namespace JohnsJustice
 		{
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
+			
+			_soundManager.PlaySoundtrack();
 
 			_player.Update(gameTime);
 			_enemy.Update(gameTime);

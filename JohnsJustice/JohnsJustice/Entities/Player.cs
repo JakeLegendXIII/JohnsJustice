@@ -29,8 +29,8 @@ namespace JohnsJustice.Entities
 			_idleAnimation = new SpriteAnimation();
 			_idleAnimation.AddFrame(_idleSprite1, 0);
 			_idleAnimation.AddFrame(_idleSprite2, 0.2f);
-			_idleAnimation.AddFrame(_idleSprite3, 0.2f);
-			_idleAnimation.AddFrame(_idleSprite4, 0.2f);
+			_idleAnimation.AddFrame(_idleSprite3, 0.5f);
+			_idleAnimation.AddFrame(_idleSprite4, 0.75f);
 			_idleAnimation.Play();
 
 		}

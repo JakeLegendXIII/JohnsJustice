@@ -13,17 +13,17 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Music/03 Circuit Breaker (LOOP).wav
+#begin Music/CircuitBreaker.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Music/03 Circuit Breaker (LOOP).wav
+/build:Music/CircuitBreaker.wav
 
-#begin Music/08 No Survivors (LOOP).wav
+#begin Music/NoSurvivors.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:Music/08 No Survivors (LOOP).wav
+/build:Music/NoSurvivors.wav
 
 #begin SFX/Hit 3.wav
 /importer:WavImporter
