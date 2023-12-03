@@ -20,6 +20,8 @@ namespace JohnsJustice
 		private SpriteBatch _spriteBatch;
 
 		private Player _player;
+		private Enemy _enemy;
+		private Enemy2 _enemy2;
 		private Texture2D _playerSpriteSheet;
 		private Texture2D _enemySpriteSheet;
 		private Texture2D _enemy2SpriteSheet;
@@ -51,6 +53,9 @@ namespace JohnsJustice
 			_enemy2SpriteSheet = Content.Load<Texture2D>(ENEMY2_SPRITE_SHEET);
 
 			_player = new Player(_playerSpriteSheet, new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y));
+
+			_enemy = new Enemy(_enemySpriteSheet, new Vector2(200, PLAYER_START_POS_Y));
+			_enemy2 = new Enemy2(_enemy2SpriteSheet, new Vector2(400, PLAYER_START_POS_Y));
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -58,7 +63,9 @@ namespace JohnsJustice
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
-			// TODO: Add your update logic here
+			_player.Update(gameTime);
+			_enemy.Update(gameTime);
+			_enemy2.Update(gameTime);
 
 			base.Update(gameTime);
 		}
@@ -70,6 +77,8 @@ namespace JohnsJustice
 			_spriteBatch.Begin();
 
 			_player.Draw(_spriteBatch, gameTime);
+			_enemy.Draw(_spriteBatch, gameTime);
+			_enemy2.Draw(_spriteBatch, gameTime);
 
 			_spriteBatch.End();
 

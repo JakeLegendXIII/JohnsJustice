@@ -13,6 +13,8 @@ namespace JohnsJustice.Entities
 		private Sprite _idleSprite3;
 		private Sprite _idleSprite4;
 
+		private SpriteAnimation _idleAnimation;
+
 		public int DrawOrder => 1;
 
 		public Player(Texture2D spriteSheet, Vector2 position)
@@ -20,19 +22,27 @@ namespace JohnsJustice.Entities
 			Position = position;
 			// 13,34  and 65/64
 			_idleSprite1 = new Sprite(spriteSheet, 30, 14, 35, 50);
-			_idleSprite2 = new Sprite(spriteSheet, 30, 14, 35, 50);
-			_idleSprite3 = new Sprite(spriteSheet, 30, 14, 35, 50);
-			_idleSprite4 = new Sprite(spriteSheet, 30, 14, 35, 50);
+			_idleSprite2 = new Sprite(spriteSheet, 128, 14, 31, 50);
+			_idleSprite3 = new Sprite(spriteSheet, 223, 16, 32, 50);
+			_idleSprite4 = new Sprite(spriteSheet, 319, 14, 32, 50);
+
+			_idleAnimation = new SpriteAnimation();
+			_idleAnimation.AddFrame(_idleSprite1, 0);
+			_idleAnimation.AddFrame(_idleSprite2, 0.2f);
+			_idleAnimation.AddFrame(_idleSprite3, 0.2f);
+			_idleAnimation.AddFrame(_idleSprite4, 0.2f);
+			_idleAnimation.Play();
+
 		}
 
 		public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
 		{
-			_idleSprite1.Draw(spriteBatch, Position);
+			_idleAnimation.Draw(spriteBatch, Position);
 		}
 
 		public void Update(GameTime gameTime)
 		{
-			
+			_idleAnimation.Update(gameTime);
 		}
 	}
 }

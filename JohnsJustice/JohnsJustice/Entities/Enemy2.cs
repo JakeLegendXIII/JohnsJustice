@@ -1,11 +1,10 @@
 ﻿using JohnsJustice.Graphics;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using Microsoft.Xna.Framework;
 
 namespace JohnsJustice.Entities
 {
-	public class Enemy : IGameEntity
+	public class Enemy2 : IGameEntity
 	{
 		public Vector2 Position { get; set; }
 
@@ -13,7 +12,7 @@ namespace JohnsJustice.Entities
 
 		public int DrawOrder => 1;
 
-		public Enemy(Texture2D spriteSheet, Vector2 position)
+		public Enemy2(Texture2D spriteSheet, Vector2 position)
 		{
 			Position = position;
 			_idleSprite1 = new Sprite(spriteSheet, 26, 14, 37, 50);
@@ -26,7 +25,7 @@ namespace JohnsJustice.Entities
 
 		public void Update(GameTime gameTime)
 		{
-			
+
 		}
 	}
 }
