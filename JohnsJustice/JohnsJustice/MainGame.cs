@@ -88,6 +88,7 @@ namespace JohnsJustice
 			
 			_soundManager.PlaySoundtrack();
 			_inputManager.ProcessControls(gameTime);
+			KeepPlayerInBounds();
 
 			_player.Update(gameTime);
 			_enemy.Update(gameTime);
