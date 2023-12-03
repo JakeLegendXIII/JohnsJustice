@@ -17,6 +17,8 @@ namespace JohnsJustice
 		private const string ENEMY2_SPRITE_SHEET = "Sprites/enemy-punk2";
 		private const string MUSIC = "Music/NoSurvivors";
 		private const string MUSIC1 = "Music/CircuitBreaker";
+		private const string HIT = "SFX/Hit";
+		private const string MISS = "SFX/Miss";
 
 		public const int WINDOW_WIDTH = 600;
 		public const int WINDOW_HEIGHT = 150;
@@ -32,8 +34,12 @@ namespace JohnsJustice
 		private Texture2D _playerSpriteSheet;
 		private Texture2D _enemySpriteSheet;
 		private Texture2D _enemy2SpriteSheet;
+
 		private SoundEffect _music;
 		private SoundEffect _music1;
+
+		private SoundEffect _hit;
+		private SoundEffect _miss;
 
 		private SoundManager _soundManager;
 		private InputManager _inputManager;
@@ -46,8 +52,7 @@ namespace JohnsJustice
 		}
 
 		protected override void Initialize()
-		{
-			// TODO: Add your initialization logic here
+		{			
 			Window.Title = "John's Justice: Flush with Fury";
 			_graphics.PreferredBackBufferWidth = WINDOW_WIDTH;
 			_graphics.PreferredBackBufferHeight = WINDOW_HEIGHT;
@@ -68,12 +73,17 @@ namespace JohnsJustice
 
 			_music = Content.Load<SoundEffect>(MUSIC);
 			_music1 = Content.Load<SoundEffect>(MUSIC1);
+			_hit = Content.Load<SoundEffect>(HIT);
+			_miss = Content.Load<SoundEffect>(MISS);
 
 			var track1 = _music.CreateInstance();
 			var track2 = _music1.CreateInstance();
 			_soundManager.SetSoundtrack(new List<SoundEffectInstance>() { track1, track2 });
 
-			_player = new Player(_playerSpriteSheet, new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y));
+			var hitInstance = _hit.CreateInstance();
+			var missInstance = _miss.CreateInstance();
+
+			_player = new Player(_playerSpriteSheet, new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y), hitInstance, missInstance);
 
 			_enemy = new Enemy(_enemySpriteSheet, new Vector2(200, PLAYER_START_POS_Y));
 			_enemy2 = new Enemy2(_enemy2SpriteSheet, new Vector2(400, PLAYER_START_POS_Y));

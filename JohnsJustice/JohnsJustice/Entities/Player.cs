@@ -1,8 +1,7 @@
 ﻿using JohnsJustice.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Reflection.Metadata.Ecma335;
 
 namespace JohnsJustice.Entities
 {
@@ -22,21 +21,26 @@ namespace JohnsJustice.Entities
 		private Sprite _walkingSprite1;
 		private Sprite _walkingSprite2;
 		private Sprite _walkingSprite3;
-		private Sprite _walkingSprite4;		
+		private Sprite _walkingSprite4;
 
 		private SpriteAnimation _idleAnimation;
 		private SpriteAnimation _punchAnimation;
 		private SpriteAnimation _walkingAnimation;
 
+		private SoundEffectInstance _hit;
+		private SoundEffectInstance _miss;
+
 		public PlayerState State { get; set; }
 
 		public int DrawOrder => 1;
 
-		public Player(Texture2D spriteSheet, Vector2 position)
+		public Player(Texture2D spriteSheet, Vector2 position, SoundEffectInstance hit, SoundEffectInstance miss)
 		{
 			State = PlayerState.Idle;
 
 			Position = position;
+			_hit = hit;
+			_miss = miss;
 
 			_idleSprite1 = new Sprite(spriteSheet, 30, 14, 35, 50);
 			_idleSprite2 = new Sprite(spriteSheet, 128, 14, 31, 50);
@@ -66,7 +70,7 @@ namespace JohnsJustice.Entities
 			_walkingSprite2 = new Sprite(spriteSheet, 512, 14, 35, 50);
 			_walkingSprite3 = new Sprite(spriteSheet, 608, 13, 35, 50);
 			_walkingSprite4 = new Sprite(spriteSheet, 705, 14, 35, 50);
-			
+
 			_walkingAnimation = new SpriteAnimation();
 			_walkingAnimation.ShouldLoop = false;
 			_walkingAnimation.AddFrame(_walkingSprite1, 0);
@@ -95,16 +99,24 @@ namespace JohnsJustice.Entities
 		public void Update(GameTime gameTime)
 		{
 			if (State == PlayerState.Punching)
-			{				
+			{
 				if (!_punchAnimation.IsPlaying)
 				{
 					State = PlayerState.Idle;
 
-					_idleAnimation.Play();													
+					_idleAnimation.Play();
+				}
+
+				if (_punchAnimation.CurrentFrame == _punchAnimation.GetFrame(2))
+				{
+					if (_miss.State != SoundState.Playing)
+					{
+						_miss.Play();
+					}
 				}
 
 				_punchAnimation.Update(gameTime);
-				
+
 			}
 			else if (State == PlayerState.Idle)
 			{
@@ -117,7 +129,7 @@ namespace JohnsJustice.Entities
 			}
 			else if (State == PlayerState.Walking)
 			{
-				_walkingAnimation.Update(gameTime);				
+				_walkingAnimation.Update(gameTime);
 
 				if (!_walkingAnimation.IsPlaying)
 				{
@@ -144,7 +156,7 @@ namespace JohnsJustice.Entities
 			State = PlayerState.Walking;
 			_walkingAnimation.Play();
 
-			Position = new Vector2(Position.X + 15f * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
+			Position = new Vector2(Position.X + 30f * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
 
 			return true;
 		}
@@ -154,7 +166,7 @@ namespace JohnsJustice.Entities
 			State = PlayerState.Walking;
 			_walkingAnimation.Play();
 
-			Position = new Vector2(Position.X - 25f * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
+			Position = new Vector2(Position.X - 45f * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
 
 			return true;
 		}

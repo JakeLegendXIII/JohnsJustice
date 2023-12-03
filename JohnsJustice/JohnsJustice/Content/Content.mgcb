@@ -25,17 +25,17 @@
 /processorParam:Quality=Best
 /build:Music/NoSurvivors.wav
 
-#begin SFX/Hit 3.wav
+#begin SFX/Hit.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:SFX/Hit 3.wav
+/build:SFX/Hit.wav
 
-#begin SFX/Miss 2.wav
+#begin SFX/Miss.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:SFX/Miss 2.wav
+/build:SFX/Miss.wav
 
 #begin Sprites/enemy-punk.png
 /importer:TextureImporter
