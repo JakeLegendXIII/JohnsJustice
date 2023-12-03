@@ -53,7 +53,7 @@ namespace JohnsJustice.Entities
 			_punchAnimation.AddFrame(_punchSprite1, 0);
 			_punchAnimation.AddFrame(_punchSprite2, 0.1f);
 			_punchAnimation.AddFrame(_punchSprite3, 0.4f);
-			_punchAnimation.AddFrame(_idleSprite1, 0.6f);
+			_punchAnimation.AddFrame(_punchSprite1, 0.6f);
 			_punchAnimation.Play();
 
 		}
@@ -73,17 +73,25 @@ namespace JohnsJustice.Entities
 		public void Update(GameTime gameTime)
 		{
 			if (State == PlayerState.Punching)
-			{
-				_punchAnimation.Update(gameTime);
-
-				if (_punchAnimation.PlaybackProgress == 0 || _punchAnimation.IsPlaying == false)
+			{				
+				if (!_punchAnimation.IsPlaying)
 				{
 					State = PlayerState.Idle;
+
+					_idleAnimation.Play();													
 				}
+
+				_punchAnimation.Update(gameTime);
+				
 			}
 			else if (State == PlayerState.Idle)
 			{
 				_idleAnimation.Update(gameTime);
+
+				if (!_idleAnimation.IsPlaying)
+				{
+					_idleAnimation.Play();
+				}
 			}
 		}
 
@@ -93,6 +101,7 @@ namespace JohnsJustice.Entities
 				return false;
 
 			State = PlayerState.Punching;
+			_punchAnimation.Play();
 
 			return true;
 		}

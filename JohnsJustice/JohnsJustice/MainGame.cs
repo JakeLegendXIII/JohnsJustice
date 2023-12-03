@@ -110,5 +110,29 @@ namespace JohnsJustice
 
 			base.Draw(gameTime);
 		}
+
+		// Called during Input handling for movement
+		private void KeepPlayerInBounds()
+		{
+			if (_player.Position.X < 0)
+			{
+				_player.Position = new Vector2(0, _player.Position.Y);
+			}
+
+			if (_player.Position.X > WINDOW_WIDTH - 35)
+			{
+				_player.Position = new Vector2(WINDOW_WIDTH - 35, _player.Position.Y);
+			}
+
+			if (_player.Position.Y < 0)
+			{
+				_player.Position = new Vector2(_player.Position.X, 0);
+			}
+
+			if (_player.Position.Y > WINDOW_HEIGHT - 50)
+			{
+				_player.Position = new Vector2(_player.Position.X, WINDOW_HEIGHT - 50);
+			}
+		}
 	}
 }
