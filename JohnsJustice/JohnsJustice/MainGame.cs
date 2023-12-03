@@ -1,5 +1,6 @@
 ﻿using JohnsJustice.Engine.Sound;
 using JohnsJustice.Entities;
+using JohnsJustice.System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -35,6 +36,7 @@ namespace JohnsJustice
 		private SoundEffect _music1;
 
 		private SoundManager _soundManager;
+		private InputManager _inputManager;
 
 		public MainGame()
 		{
@@ -75,6 +77,8 @@ namespace JohnsJustice
 
 			_enemy = new Enemy(_enemySpriteSheet, new Vector2(200, PLAYER_START_POS_Y));
 			_enemy2 = new Enemy2(_enemy2SpriteSheet, new Vector2(400, PLAYER_START_POS_Y));
+
+			_inputManager = new InputManager(_player);
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -83,6 +87,7 @@ namespace JohnsJustice
 				Exit();
 			
 			_soundManager.PlaySoundtrack();
+			_inputManager.ProcessControls(gameTime);
 
 			_player.Update(gameTime);
 			_enemy.Update(gameTime);
