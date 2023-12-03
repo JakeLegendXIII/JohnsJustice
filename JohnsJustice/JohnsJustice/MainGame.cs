@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using JohnsJustice.Entities;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -10,15 +11,18 @@ namespace JohnsJustice
 		private const string ENEMY_SPRITE_SHEET = "Sprites/enemy-punk";
 		private const string ENEMY2_SPRITE_SHEET = "Sprites/enemy-punk2";
 
-		// 13,34  and 65/64
-
 		public const int WINDOW_WIDTH = 600;
-		public const int WINDOW_HEIGHT = 200;
-		public const int PLAYER_START_POS_Y = WINDOW_HEIGHT - 16;
+		public const int WINDOW_HEIGHT = 150;
+		public const int PLAYER_START_POS_Y = WINDOW_HEIGHT - 65;
 		public const int PLAYER_START_POS_X = 5;
 
 		private GraphicsDeviceManager _graphics;
 		private SpriteBatch _spriteBatch;
+
+		private Player _player;
+		private Texture2D _playerSpriteSheet;
+		private Texture2D _enemySpriteSheet;
+		private Texture2D _enemy2SpriteSheet;
 
 		public MainGame()
 		{
@@ -30,8 +34,10 @@ namespace JohnsJustice
 		protected override void Initialize()
 		{
 			// TODO: Add your initialization logic here
+			Window.Title = "John's Justice: Flush with Fury";
 			_graphics.PreferredBackBufferWidth = WINDOW_WIDTH;
 			_graphics.PreferredBackBufferHeight = WINDOW_HEIGHT;
+			_graphics.ApplyChanges();
 
 			base.Initialize();
 		}
@@ -40,11 +46,11 @@ namespace JohnsJustice
 		{
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			_spriteBatch = Content.Load<SpriteBatch>(PLAYER_SPRITE_SHEET);
-			_spriteBatch = Content.Load<SpriteBatch>(ENEMY_SPRITE_SHEET);
-			_spriteBatch = Content.Load<SpriteBatch>(ENEMY2_SPRITE_SHEET);
+			_playerSpriteSheet = Content.Load<Texture2D>(PLAYER_SPRITE_SHEET);
+			_enemySpriteSheet = Content.Load<Texture2D>(ENEMY_SPRITE_SHEET);
+			_enemy2SpriteSheet = Content.Load<Texture2D>(ENEMY2_SPRITE_SHEET);
 
-			// TODO: use this.Content to load your game content here
+			_player = new Player(_playerSpriteSheet, new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y));
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -63,7 +69,7 @@ namespace JohnsJustice
 
 			_spriteBatch.Begin();
 
-
+			_player.Draw(_spriteBatch, gameTime);
 
 			_spriteBatch.End();
 
