@@ -26,6 +26,8 @@ namespace JohnsJustice
 		public const int PLAYER_START_POS_Y = WINDOW_HEIGHT - 65;
 		public const int PLAYER_START_POS_X = 5;
 
+		public GameState GameState;
+
 		private GraphicsDeviceManager _graphics;
 		private SpriteBatch _spriteBatch;
 
@@ -93,6 +95,8 @@ namespace JohnsJustice
 			_enemy2.Player = _player;
 
 			_inputManager = new InputManager(_player);
+
+			GameState = GameState.Playing;
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -101,12 +105,19 @@ namespace JohnsJustice
 				Exit();
 			
 			_soundManager.PlaySoundtrack();
-			_inputManager.ProcessControls(gameTime);
-			KeepPlayerInBounds();
 
-			_player.Update(gameTime);
-			_enemy.Update(gameTime);
-			_enemy2.Update(gameTime);
+			if (GameState == GameState.Playing)
+			{
+				if (_player.State != PlayerState.KO)
+				{
+					_inputManager.ProcessControls(gameTime);
+				}
+				KeepPlayerInBounds();
+
+				_player.Update(gameTime);
+				_enemy.Update(gameTime);
+				_enemy2.Update(gameTime);
+			}			
 
 			base.Update(gameTime);
 		}
@@ -117,9 +128,12 @@ namespace JohnsJustice
 
 			_spriteBatch.Begin();
 
-			_player.Draw(_spriteBatch, gameTime);
-			_enemy.Draw(_spriteBatch, gameTime);
-			_enemy2.Draw(_spriteBatch, gameTime);
+			if (GameState == GameState.Playing)
+			{
+				_player.Draw(_spriteBatch, gameTime);
+				_enemy.Draw(_spriteBatch, gameTime);
+				_enemy2.Draw(_spriteBatch, gameTime);
+			}
 
 			_spriteBatch.End();
 
