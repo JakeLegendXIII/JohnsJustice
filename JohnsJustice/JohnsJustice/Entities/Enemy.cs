@@ -39,7 +39,7 @@ namespace JohnsJustice.Entities
 
 		private int _health = 100;
 
-		private bool IsDead = false;
+		public bool IsDead = false;
 
 		public bool CanPunch { get; set; } = false;
 
@@ -100,7 +100,7 @@ namespace JohnsJustice.Entities
 			_koAnimation.AddFrame(_hurtSprite4, 0.5f);
 			_koAnimation.Play();
 
-			CollisionBox = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40, 55);
+			CollisionBox = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40 * 2, 55 * 2);
 
 			_texture = new Texture2D(spriteSheet.GraphicsDevice, 1, 1);
 			_texture.SetData(new Color[] { Color.MonoGameOrange });

@@ -15,6 +15,7 @@ namespace JohnsJustice.System
 			_player = player;
 		}
 
+
 		public void ProcessControls(GameTime gameTime)
 		{
 			KeyboardState keyboardState = Keyboard.GetState();

@@ -42,10 +42,13 @@ namespace JohnsJustice.Entities
 
 		private Enemy _enemy;
 		private Enemy _enemy1;
+		private Enemy _enemy2;
+
+		private HealthText _healthText;
 
 		private int _health = 100;
 
-		private bool IsDead = false;
+		public bool IsDead = false;
 
 		public PlayerState State { get; set; }
 
@@ -55,14 +58,14 @@ namespace JohnsJustice.Entities
 		{
 			get
 			{
-				Rectangle box = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40, 55);
+				Rectangle box = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40 * 2, 55 * 2);
 
 				return box;
 			}
 		}
 
 
-		public Player(Texture2D spriteSheet, Vector2 position, SoundEffectInstance hit, SoundEffectInstance miss, Enemy enemy, Enemy enemy1)
+		public Player(Texture2D spriteSheet, Vector2 position, SoundEffectInstance hit, SoundEffectInstance miss, Enemy enemy, Enemy enemy1, Enemy enemy2, HealthText healthText)
 		{
 			State = PlayerState.Idle;
 
@@ -131,6 +134,9 @@ namespace JohnsJustice.Entities
 			_texture.SetData(new Color[] { Color.MonoGameOrange });
 			_enemy = enemy;
 			_enemy1 = enemy1;
+			_enemy2 = enemy2;
+
+			_healthText = healthText;
 		}
 
 		public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
@@ -173,6 +179,8 @@ namespace JohnsJustice.Entities
 				return;
 			}
 
+			CheckIfEnemiesAreDead();
+
 			if (State == PlayerState.Punching)
 			{
 				if (!_punchAnimation.IsPlaying)
@@ -193,6 +201,12 @@ namespace JohnsJustice.Entities
 					else if (EnemyCollision1() && _hit.State != SoundState.Playing)
 					{
 						_enemy1.Hurt(30);
+
+						_hit.Play();
+					}
+					else if (EnemyCollision2() && _hit.State != SoundState.Playing)
+					{
+						_enemy2.Hurt(30);
 
 						_hit.Play();
 					}
@@ -243,7 +257,7 @@ namespace JohnsJustice.Entities
 					IsDead = true;
 				}
 			}
-		}
+		}	
 
 		public void Hurt(int damage)
 		{
@@ -256,11 +270,22 @@ namespace JohnsJustice.Entities
 				_health = 0;
 
 				_koAnimation.Play();
+				_healthText.Text = "Health: " + _health;
 			}
 			else
 			{
 				State = PlayerState.Hit;
 				_hurtAnimation.Play();
+
+				_healthText.Text = "Health: " + _health;
+			}
+		}
+
+		private void CheckIfEnemiesAreDead()
+		{			
+			if (_enemy.IsDead && _enemy1.IsDead && _enemy2.IsDead)
+			{
+				// broadcast message that all enemies are dead
 			}
 		}
 
@@ -294,6 +319,21 @@ namespace JohnsJustice.Entities
 			return false;
 		}
 
+		private bool EnemyCollision2()
+		{
+			if (CollisionBox.Intersects(_enemy2.CollisionBox))
+			{
+				if (_enemy2.CanPunch == false)
+				{
+					_enemy2.StartFight();
+				}
+
+				return true;
+			}
+
+			return false;
+		}
+
 		public bool BeginPunch()
 		{
 			if (State == PlayerState.Punching)
@@ -310,7 +350,7 @@ namespace JohnsJustice.Entities
 			State = PlayerState.Walking;
 			_walkingAnimation.Play();
 
-			if (!(EnemyCollision() || EnemyCollision1()))
+			if (!(EnemyCollision() || EnemyCollision1() || EnemyCollision2()))
 			{
 				Position = new Vector2(Position.X + 35f * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
 			}

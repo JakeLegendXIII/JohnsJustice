@@ -20,10 +20,11 @@ namespace JohnsJustice
 		private const string MUSIC1 = "Music/CircuitBreaker";
 		private const string HIT = "SFX/Hit";
 		private const string MISS = "SFX/Miss";
+		private const string TextFont = "Fonts/File";
 
-		public const int WINDOW_WIDTH = 600;
-		public const int WINDOW_HEIGHT = 150;
-		public const int PLAYER_START_POS_Y = WINDOW_HEIGHT - 65;
+		public const int WINDOW_WIDTH = 1200; // 600
+		public const int WINDOW_HEIGHT = 300; // 150
+		public const int PLAYER_START_POS_Y = WINDOW_HEIGHT - 160;
 		public const int PLAYER_START_POS_X = 5;
 
 		public GameState GameState;
@@ -34,6 +35,7 @@ namespace JohnsJustice
 		private Player _player;
 		private Enemy _enemy;
 		private Enemy _enemy2;
+		private Enemy _enemy3;
 		private Texture2D _playerSpriteSheet;
 		private Texture2D _enemySpriteSheet;
 		private Texture2D _enemy2SpriteSheet;
@@ -46,6 +48,8 @@ namespace JohnsJustice
 
 		private SoundManager _soundManager;
 		private InputManager _inputManager;
+
+		private HealthText _healthText;
 
 		public MainGame()
 		{
@@ -79,6 +83,8 @@ namespace JohnsJustice
 			_hit = Content.Load<SoundEffect>(HIT);
 			_miss = Content.Load<SoundEffect>(MISS);
 
+			_healthText = new HealthText(Content.Load<SpriteFont>(TextFont));
+
 			var track1 = _music.CreateInstance();
 			var track2 = _music1.CreateInstance();
 			_soundManager.SetSoundtrack(new List<SoundEffectInstance>() { track1, track2 });
@@ -87,12 +93,15 @@ namespace JohnsJustice
 			var missInstance = _miss.CreateInstance();			
 
 			_enemy = new Enemy(_enemySpriteSheet, new Vector2(200, PLAYER_START_POS_Y), hitInstance, missInstance);
-			_enemy2 = new Enemy(_enemy2SpriteSheet, new Vector2(400, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy2 = new Enemy(_enemy2SpriteSheet, new Vector2(600, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy3 = new Enemy(_enemySpriteSheet, new Vector2(800, PLAYER_START_POS_Y), hitInstance, missInstance);
 
-			_player = new Player(_playerSpriteSheet, new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y), hitInstance, missInstance, _enemy, _enemy2);
+			_player = new Player(_playerSpriteSheet, new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y), 
+				hitInstance, missInstance, _enemy, _enemy2, _enemy3, _healthText);
 
 			_enemy.Player = _player;
 			_enemy2.Player = _player;
+			_enemy3.Player = _player;
 
 			_inputManager = new InputManager(_player);
 
@@ -106,6 +115,11 @@ namespace JohnsJustice
 			
 			_soundManager.PlaySoundtrack();
 
+			if (GameState == GameState.Menu)
+			{
+				HandleMenuInput(gameTime);
+			}
+
 			if (GameState == GameState.Playing)
 			{
 				if (_player.State != PlayerState.KO)
@@ -117,6 +131,7 @@ namespace JohnsJustice
 				_player.Update(gameTime);
 				_enemy.Update(gameTime);
 				_enemy2.Update(gameTime);
+				_enemy3.Update(gameTime);
 			}			
 
 			base.Update(gameTime);
@@ -128,26 +143,31 @@ namespace JohnsJustice
 
 			_spriteBatch.Begin();
 
-			if (GameState == GameState.Playing)
+			if (GameState == GameState.Menu)
+			{
+				GraphicsDevice.Clear(Color.MonoGameOrange);
+			}
+			else if (GameState == GameState.Playing)
 			{
 				_player.Draw(_spriteBatch, gameTime);
 				_enemy.Draw(_spriteBatch, gameTime);
 				_enemy2.Draw(_spriteBatch, gameTime);
+				_enemy3.Draw(_spriteBatch, gameTime);
+
+				_healthText.Draw(_spriteBatch, gameTime);
+			}
+			else if (GameState == GameState.GameOver)
+			{
+				GraphicsDevice.Clear(Color.Red);
+			}
+			else if (GameState == GameState.Credits)
+			{
+				GraphicsDevice.Clear(Color.Green);
 			}
 
 			_spriteBatch.End();
 
 			base.Draw(gameTime);
-		}
-
-		public bool CurrentlyColliding()
-		{
-			if (_player.CollisionBox.Intersects(_enemy.CollisionBox) ||	 _player.CollisionBox.Intersects(_enemy2.CollisionBox))
-			{
-				return true;
-			}
-
-			return false;
 		}
 
 		// Called during Input handling for movement
@@ -173,5 +193,34 @@ namespace JohnsJustice
 				_player.Position = new Vector2(_player.Position.X, WINDOW_HEIGHT - 50);
 			}
 		}
+
+		private void HandleMenuInput(GameTime gameTime)
+		{
+			KeyboardState keyboardState = Keyboard.GetState();
+			GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+
+			bool isPunchKeyPressed = keyboardState.IsKeyDown(Keys.Space);
+
+			if (isPunchKeyPressed || gamePadState.Buttons.A == ButtonState.Pressed)
+			{
+				GameState = GameState.Playing;
+			}
+		}
+
+
+		private void Reset()
+		{
+			_player.Position = new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y);
+			_player.IsDead = false;
+			_player.State = PlayerState.Idle;
+			//_player.Health = 100;
+
+			_enemy.Position = new Vector2(200, PLAYER_START_POS_Y);
+			_enemy.IsDead = false;
+			_enemy.State = EnemyState.Idle;
+			//_enemy.Health = 100;
+
+		}
+
 	}
 }
