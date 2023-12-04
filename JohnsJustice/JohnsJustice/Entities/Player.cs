@@ -24,9 +24,16 @@ namespace JohnsJustice.Entities
 		private Sprite _walkingSprite3;
 		private Sprite _walkingSprite4;
 
+		private Sprite _hurtSprite1;
+		private Sprite _hurtSprite2;
+		private Sprite _hurtSprite3;
+		private Sprite _hurtSprite4;
+
 		private SpriteAnimation _idleAnimation;
 		private SpriteAnimation _punchAnimation;
 		private SpriteAnimation _walkingAnimation;
+		private SpriteAnimation _hurtAnimation;
+		private SpriteAnimation _koAnimation;
 
 		private SoundEffectInstance _hit;
 		private SoundEffectInstance _miss;
@@ -34,6 +41,9 @@ namespace JohnsJustice.Entities
 		private Texture2D _texture;
 
 		private Enemy _enemy;
+		private Enemy _enemy1;
+
+		private int _health = 100;
 
 		public PlayerState State { get; set; }
 
@@ -50,7 +60,7 @@ namespace JohnsJustice.Entities
 		}
 
 
-		public Player(Texture2D spriteSheet, Vector2 position, SoundEffectInstance hit, SoundEffectInstance miss, Enemy enemy)
+		public Player(Texture2D spriteSheet, Vector2 position, SoundEffectInstance hit, SoundEffectInstance miss, Enemy enemy, Enemy enemy1)
 		{
 			State = PlayerState.Idle;
 
@@ -95,9 +105,18 @@ namespace JohnsJustice.Entities
 			_walkingAnimation.AddFrame(_walkingSprite4, 0.75f);
 			_walkingAnimation.Play();
 
+			//_hurtAnimation = new SpriteAnimation();
+			//_hurtAnimation.ShouldLoop = false;
+			//_hurtAnimation.AddFrame(_hurtSprite1, 0);
+			//_hurtAnimation.AddFrame(_hurtSprite2, 0.2f);
+			//_hurtAnimation.AddFrame(_hurtSprite1, 0.4f);
+			//_hurtAnimation.Play();
+
+
 			_texture = new Texture2D(spriteSheet.GraphicsDevice, 1, 1);
 			_texture.SetData(new Color[] { Color.MonoGameOrange });
 			_enemy = enemy;
+			_enemy1 = enemy1;
 		}
 
 		public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
@@ -135,6 +154,14 @@ namespace JohnsJustice.Entities
 					if (EnemyCollision() && _hit.State != SoundState.Playing)
 					{
 						// Damage Event to Enemy? Something here
+						_enemy.Hurt(30);
+
+						_hit.Play();
+					}
+					else if (EnemyCollision1() && _hit.State != SoundState.Playing)
+					{
+						// Damage Event to Enemy? Something here
+						_enemy1.Hurt(30);
 
 						_hit.Play();
 					}
@@ -174,6 +201,11 @@ namespace JohnsJustice.Entities
 			return CollisionBox.Intersects(_enemy.CollisionBox);
 		}
 
+		private bool EnemyCollision1()
+		{
+			return CollisionBox.Intersects(_enemy1.CollisionBox);
+		}
+
 		public bool BeginPunch()
 		{
 			if (State == PlayerState.Punching)
@@ -190,7 +222,7 @@ namespace JohnsJustice.Entities
 			State = PlayerState.Walking;
 			_walkingAnimation.Play();
 
-			if (!EnemyCollision())
+			if (!(EnemyCollision() || EnemyCollision1() ))
 			{
 				Position = new Vector2(Position.X + 35f * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
 			}

@@ -7,6 +7,8 @@ namespace JohnsJustice.Entities
 {
 	public class Enemy : IGameEntity
 	{
+		public Player Player { get; set; }
+
 		public Vector2 Position { get; set; }
 
 		private Sprite _idleSprite1;
@@ -18,8 +20,15 @@ namespace JohnsJustice.Entities
 		private Sprite _punchSprite2;
 		private Sprite _punchSprite3;
 
+		private Sprite _hurtSprite1;
+		private Sprite _hurtSprite2;
+		private Sprite _hurtSprite3;
+		private Sprite _hurtSprite4;
+
 		private SpriteAnimation _idleAnimation;
 		private SpriteAnimation _punchAnimation;
+		private SpriteAnimation _hurtAnimation;
+		private SpriteAnimation _koAnimation;
 
 		public int DrawOrder => 1;
 
@@ -27,7 +36,13 @@ namespace JohnsJustice.Entities
 
 		private int _health = 100;
 
-		public Rectangle CollisionBox { get; set;}
+		private bool IsDead = false;
+
+		public bool CanPunch { get; set; } = false;
+
+		public EnemyState State { get; set; }
+
+		public Rectangle CollisionBox { get; set; }
 
 		public Enemy(Texture2D spriteSheet, Vector2 position)
 		{
@@ -57,11 +72,32 @@ namespace JohnsJustice.Entities
 			_punchAnimation.Play();
 
 
+			_hurtSprite1 = new Sprite(spriteSheet, 1084, 14, 37, 50);
+			_hurtSprite2 = new Sprite(spriteSheet, 1183, 14, 37, 50);
+			_hurtSprite3 = new Sprite(spriteSheet, 1271, 15, 50, 50);
+			_hurtSprite4 = new Sprite(spriteSheet, 1354, 14, 64, 50);
+
+			_hurtAnimation = new SpriteAnimation();
+			_hurtAnimation.ShouldLoop = false;
+			_hurtAnimation.AddFrame(_hurtSprite1, 0);
+			_hurtAnimation.AddFrame(_hurtSprite2, 0.1f);
+			_hurtAnimation.AddFrame(_hurtSprite1, 0.3f);
+			_hurtAnimation.Play();
+
+			_koAnimation = new SpriteAnimation();
+			_koAnimation.ShouldLoop = false;
+			_koAnimation.AddFrame(_hurtSprite1, 0);
+			_koAnimation.AddFrame(_hurtSprite2, 0.1f);
+			_koAnimation.AddFrame(_hurtSprite3, 0.3f);
+			_koAnimation.AddFrame(_hurtSprite4, 0.5f);
+			_koAnimation.Play();
+
 			CollisionBox = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40, 55);
 
 			_texture = new Texture2D(spriteSheet.GraphicsDevice, 1, 1);
 			_texture.SetData(new Color[] { Color.MonoGameOrange });
 
+			State = EnemyState.Idle;
 
 		}
 
@@ -69,12 +105,69 @@ namespace JohnsJustice.Entities
 		{
 			spriteBatch.Draw(_texture, CollisionBox, Color.White);
 
-			_idleAnimation.Draw(spriteBatch, Position);
+			if (IsDead)
+			{
+				_hurtSprite4.Draw(spriteBatch, Position);
+				return;
+			}
+
+			if (State == EnemyState.Idle)
+			{
+				_idleAnimation.Draw(spriteBatch, Position);
+			}
+			else if (State == EnemyState.Punching)
+			{
+				_punchAnimation.Draw(spriteBatch, Position);
+			}
+			else if (State == EnemyState.Hit)
+			{
+				_hurtAnimation.Draw(spriteBatch, Position);
+			}
+			else if (State == EnemyState.KO)
+			{
+				_koAnimation.Draw(spriteBatch, Position);
+			}
 		}
 
 		public void Update(GameTime gameTime)
 		{
-			_idleAnimation.Update(gameTime);
+			if (IsDead)
+			{
+				_koAnimation.Update(gameTime);
+				return;
+			}
+
+			if (State == EnemyState.Idle)
+			{
+				_idleAnimation.Update(gameTime);
+			}
+			else if (State == EnemyState.Punching)
+			{
+				_punchAnimation.Update(gameTime);
+
+				if (!_punchAnimation.IsPlaying)
+				{
+					State = EnemyState.Idle;
+				}
+			}
+			else if (State == EnemyState.Hit)
+			{
+				_hurtAnimation.Update(gameTime);
+
+				if (!_hurtAnimation.IsPlaying)
+				{
+					State = EnemyState.Idle;
+				}
+			}
+			else if (State == EnemyState.KO)
+			{
+				_koAnimation.Update(gameTime);
+
+				if (!_koAnimation.IsPlaying)
+				{
+					IsDead = true;
+				}
+			}
 		}
 
 		public void Hurt(int damage)
@@ -83,12 +176,28 @@ namespace JohnsJustice.Entities
 
 			if (_health <= 0)
 			{
+				State = EnemyState.KO;
 				CollisionBox = Rectangle.Empty;
 
-				_idleAnimation.Stop();
-
 				_health = 0;
+				CanPunch = false;
+
+				_koAnimation.Play();
+			}
+			else
+			{
+				State = EnemyState.Hit;
+				_hurtAnimation.Play();
 			}
 		}
+	}
+
+	public enum EnemyState
+	{
+		Idle,
+		Punching,
+		Dead,
+		Hit,
+		KO
 	}
 }

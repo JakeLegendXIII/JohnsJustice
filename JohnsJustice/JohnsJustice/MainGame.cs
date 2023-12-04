@@ -87,7 +87,10 @@ namespace JohnsJustice
 			_enemy = new Enemy(_enemySpriteSheet, new Vector2(200, PLAYER_START_POS_Y));
 			_enemy2 = new Enemy(_enemy2SpriteSheet, new Vector2(400, PLAYER_START_POS_Y));
 
-			_player = new Player(_playerSpriteSheet, new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y), hitInstance, missInstance, _enemy);
+			_player = new Player(_playerSpriteSheet, new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y), hitInstance, missInstance, _enemy, _enemy2);
+
+			_enemy.Player = _player;
+			_enemy2.Player = _player;
 
 			_inputManager = new InputManager(_player);
 		}
