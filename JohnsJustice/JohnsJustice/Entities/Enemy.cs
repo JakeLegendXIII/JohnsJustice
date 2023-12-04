@@ -44,6 +44,8 @@ namespace JohnsJustice.Entities
 
 		public Rectangle CollisionBox { get; set; }
 
+		private Random _random;
+
 		public Enemy(Texture2D spriteSheet, Vector2 position)
 		{
 			Position = position;
@@ -98,7 +100,7 @@ namespace JohnsJustice.Entities
 			_texture.SetData(new Color[] { Color.MonoGameOrange });
 
 			State = EnemyState.Idle;
-
+			_random = new Random();
 		}
 
 		public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
@@ -140,6 +142,15 @@ namespace JohnsJustice.Entities
 			if (State == EnemyState.Idle)
 			{
 				_idleAnimation.Update(gameTime);
+
+				if (CanPunch)
+				{
+					if (_random.Next(0, 100) > 96)
+					{
+						State = EnemyState.Punching;
+						_punchAnimation.Play();
+					}
+				}
 			}
 			else if (State == EnemyState.Punching)
 			{
@@ -148,6 +159,8 @@ namespace JohnsJustice.Entities
 				if (!_punchAnimation.IsPlaying)
 				{
 					State = EnemyState.Idle;
+
+					_idleAnimation.Play();
 				}
 			}
 			else if (State == EnemyState.Hit)
@@ -190,6 +203,17 @@ namespace JohnsJustice.Entities
 				_hurtAnimation.Play();
 			}
 		}
+
+		public void StartFight()
+		{
+			CanPunch = true;
+		}
+
+		private bool PlayerCollision()
+		{
+			return CollisionBox.Intersects(Player.CollisionBox);
+		}
+
 	}
 
 	public enum EnemyState

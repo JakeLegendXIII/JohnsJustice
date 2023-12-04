@@ -153,14 +153,12 @@ namespace JohnsJustice.Entities
 				{
 					if (EnemyCollision() && _hit.State != SoundState.Playing)
 					{
-						// Damage Event to Enemy? Something here
 						_enemy.Hurt(30);
 
 						_hit.Play();
 					}
 					else if (EnemyCollision1() && _hit.State != SoundState.Playing)
 					{
-						// Damage Event to Enemy? Something here
 						_enemy1.Hurt(30);
 
 						_hit.Play();
@@ -198,12 +196,32 @@ namespace JohnsJustice.Entities
 
 		private bool EnemyCollision()
 		{
-			return CollisionBox.Intersects(_enemy.CollisionBox);
+			if (CollisionBox.Intersects(_enemy.CollisionBox))
+			{
+				if (_enemy.CanPunch == false)
+				{
+					_enemy.StartFight();
+				}
+
+				return true;
+			}
+
+			return false;
 		}
 
 		private bool EnemyCollision1()
 		{
-			return CollisionBox.Intersects(_enemy1.CollisionBox);
+			if (CollisionBox.Intersects(_enemy1.CollisionBox))
+			{
+				if (_enemy1.CanPunch == false)
+				{
+					_enemy1.StartFight();
+				}
+
+				return true;
+			}
+
+			return false;
 		}
 
 		public bool BeginPunch()
