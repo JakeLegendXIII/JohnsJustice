@@ -45,6 +45,8 @@ namespace JohnsJustice.Entities
 
 		private int _health = 100;
 
+		private bool IsDead = false;
+
 		public PlayerState State { get; set; }
 
 		public int DrawOrder => 1;
@@ -105,13 +107,25 @@ namespace JohnsJustice.Entities
 			_walkingAnimation.AddFrame(_walkingSprite4, 0.75f);
 			_walkingAnimation.Play();
 
-			//_hurtAnimation = new SpriteAnimation();
-			//_hurtAnimation.ShouldLoop = false;
-			//_hurtAnimation.AddFrame(_hurtSprite1, 0);
-			//_hurtAnimation.AddFrame(_hurtSprite2, 0.2f);
-			//_hurtAnimation.AddFrame(_hurtSprite1, 0.4f);
-			//_hurtAnimation.Play();
+			_hurtSprite1 = new Sprite(spriteSheet, 1081, 14, 33, 50);
+			_hurtSprite2 = new Sprite(spriteSheet, 1170, 14, 33, 50);
+			_hurtSprite3 = new Sprite(spriteSheet, 1261, 17, 52, 50);
+			_hurtSprite4 = new Sprite(spriteSheet, 1352, 14, 65, 50);
 
+			_hurtAnimation = new SpriteAnimation();
+			_hurtAnimation.ShouldLoop = false;
+			_hurtAnimation.AddFrame(_hurtSprite1, 0);
+			_hurtAnimation.AddFrame(_hurtSprite2, 0.2f);
+			_hurtAnimation.AddFrame(_hurtSprite1, 0.4f);
+			_hurtAnimation.Play();
+
+			_koAnimation = new SpriteAnimation();
+			_koAnimation.ShouldLoop = false;
+			_koAnimation.AddFrame(_hurtSprite1, 0);
+			_koAnimation.AddFrame(_hurtSprite2, 0.2f);
+			_koAnimation.AddFrame(_hurtSprite3, 0.4f);
+			_koAnimation.AddFrame(_hurtSprite4, 0.6f);
+			_koAnimation.Play();
 
 			_texture = new Texture2D(spriteSheet.GraphicsDevice, 1, 1);
 			_texture.SetData(new Color[] { Color.MonoGameOrange });
@@ -121,8 +135,13 @@ namespace JohnsJustice.Entities
 
 		public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
 		{
-
 			spriteBatch.Draw(_texture, CollisionBox, Color.White);
+
+			if (IsDead)
+			{
+				_hurtSprite4.Draw(spriteBatch, Position);
+				return;
+			}
 
 			if (State == PlayerState.Idle)
 			{
@@ -136,10 +155,24 @@ namespace JohnsJustice.Entities
 			{
 				_walkingAnimation.Draw(spriteBatch, Position);
 			}
+			else if (State == PlayerState.Hit)
+			{
+				_hurtAnimation.Draw(spriteBatch, Position);
+			}
+			else if (State == PlayerState.KO)
+			{
+				_koAnimation.Draw(spriteBatch, Position);
+			}
 		}
 
 		public void Update(GameTime gameTime)
 		{
+			if (IsDead)
+			{
+				_koAnimation.Update(gameTime);
+				return;
+			}
+
 			if (State == PlayerState.Punching)
 			{
 				if (!_punchAnimation.IsPlaying)
@@ -192,6 +225,43 @@ namespace JohnsJustice.Entities
 					_idleAnimation.Play();
 				}
 			}
+			else if (State == PlayerState.Hit)
+			{
+				_hurtAnimation.Update(gameTime);
+
+				if (!_hurtAnimation.IsPlaying)
+				{
+					State = PlayerState.Idle;
+				}
+			}
+			else if (State == PlayerState.KO)
+			{
+				_koAnimation.Update(gameTime);
+
+				if (!_koAnimation.IsPlaying)
+				{
+					IsDead = true;
+				}
+			}
+		}
+
+		public void Hurt(int damage)
+		{
+			_health -= damage;
+
+			if (_health <= 0)
+			{
+				State = PlayerState.KO;
+
+				_health = 0;
+
+				_koAnimation.Play();
+			}
+			else
+			{
+				State = PlayerState.Hit;
+				_hurtAnimation.Play();
+			}
 		}
 
 		private bool EnemyCollision()
@@ -240,7 +310,7 @@ namespace JohnsJustice.Entities
 			State = PlayerState.Walking;
 			_walkingAnimation.Play();
 
-			if (!(EnemyCollision() || EnemyCollision1() ))
+			if (!(EnemyCollision() || EnemyCollision1()))
 			{
 				Position = new Vector2(Position.X + 35f * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
 			}
@@ -264,6 +334,7 @@ namespace JohnsJustice.Entities
 		Idle,
 		Punching,
 		Walking,
-		Hit
+		Hit,
+		KO
 	}
 }

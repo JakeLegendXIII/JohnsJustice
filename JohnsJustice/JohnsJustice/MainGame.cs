@@ -84,8 +84,8 @@ namespace JohnsJustice
 			var hitInstance = _hit.CreateInstance();
 			var missInstance = _miss.CreateInstance();			
 
-			_enemy = new Enemy(_enemySpriteSheet, new Vector2(200, PLAYER_START_POS_Y));
-			_enemy2 = new Enemy(_enemy2SpriteSheet, new Vector2(400, PLAYER_START_POS_Y));
+			_enemy = new Enemy(_enemySpriteSheet, new Vector2(200, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy2 = new Enemy(_enemy2SpriteSheet, new Vector2(400, PLAYER_START_POS_Y), hitInstance, missInstance);
 
 			_player = new Player(_playerSpriteSheet, new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y), hitInstance, missInstance, _enemy, _enemy2);
 

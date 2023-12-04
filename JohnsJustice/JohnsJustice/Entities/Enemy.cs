@@ -1,5 +1,6 @@
 ﻿using JohnsJustice.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
@@ -30,6 +31,8 @@ namespace JohnsJustice.Entities
 		private SpriteAnimation _hurtAnimation;
 		private SpriteAnimation _koAnimation;
 
+		private SoundEffectInstance _hit;
+		private SoundEffectInstance _miss;
 		public int DrawOrder => 1;
 
 		private Texture2D _texture;
@@ -46,9 +49,12 @@ namespace JohnsJustice.Entities
 
 		private Random _random;
 
-		public Enemy(Texture2D spriteSheet, Vector2 position)
+		public Enemy(Texture2D spriteSheet, Vector2 position, SoundEffectInstance hit, SoundEffectInstance miss)
 		{
 			Position = position;
+			_hit = hit;
+			_miss = miss;
+
 			_idleSprite1 = new Sprite(spriteSheet, 26, 14, 37, 50);
 			_idleSprite2 = new Sprite(spriteSheet, 122, 14, 37, 50);
 			_idleSprite3 = new Sprite(spriteSheet, 218, 15, 37, 50);
@@ -145,7 +151,7 @@ namespace JohnsJustice.Entities
 
 				if (CanPunch)
 				{
-					if (_random.Next(0, 100) > 96)
+					if (_random.Next(0, 100) > 97)
 					{
 						State = EnemyState.Punching;
 						_punchAnimation.Play();
@@ -154,14 +160,28 @@ namespace JohnsJustice.Entities
 			}
 			else if (State == EnemyState.Punching)
 			{
-				_punchAnimation.Update(gameTime);
-
 				if (!_punchAnimation.IsPlaying)
 				{
 					State = EnemyState.Idle;
 
 					_idleAnimation.Play();
 				}
+
+				if (_punchAnimation.CurrentFrame == _punchAnimation.GetFrame(2))
+				{
+					if (PlayerCollision() && _hit.State != SoundState.Playing)
+					{
+						Player.Hurt(10);
+
+						_hit.Play();
+					}
+					else if (_miss.State != SoundState.Playing)
+					{
+						_miss.Play();
+					}
+				}
+
+				_punchAnimation.Update(gameTime);
 			}
 			else if (State == EnemyState.Hit)
 			{
