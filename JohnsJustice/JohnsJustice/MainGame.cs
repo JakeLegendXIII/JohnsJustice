@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System;
 using System.Collections.Generic;
 
 namespace JohnsJustice
@@ -30,7 +31,7 @@ namespace JohnsJustice
 
 		private Player _player;
 		private Enemy _enemy;
-		private Enemy2 _enemy2;
+		private Enemy _enemy2;
 		private Texture2D _playerSpriteSheet;
 		private Texture2D _enemySpriteSheet;
 		private Texture2D _enemy2SpriteSheet;
@@ -81,12 +82,12 @@ namespace JohnsJustice
 			_soundManager.SetSoundtrack(new List<SoundEffectInstance>() { track1, track2 });
 
 			var hitInstance = _hit.CreateInstance();
-			var missInstance = _miss.CreateInstance();
-
-			_player = new Player(_playerSpriteSheet, new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y), hitInstance, missInstance);
+			var missInstance = _miss.CreateInstance();			
 
 			_enemy = new Enemy(_enemySpriteSheet, new Vector2(200, PLAYER_START_POS_Y));
-			_enemy2 = new Enemy2(_enemy2SpriteSheet, new Vector2(400, PLAYER_START_POS_Y));
+			_enemy2 = new Enemy(_enemy2SpriteSheet, new Vector2(400, PLAYER_START_POS_Y));
+
+			_player = new Player(_playerSpriteSheet, new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y), hitInstance, missInstance, _enemy);
 
 			_inputManager = new InputManager(_player);
 		}
@@ -120,6 +121,16 @@ namespace JohnsJustice
 			_spriteBatch.End();
 
 			base.Draw(gameTime);
+		}
+
+		public bool CurrentlyColliding()
+		{
+			if (_player.CollisionBox.Intersects(_enemy.CollisionBox) ||	 _player.CollisionBox.Intersects(_enemy2.CollisionBox))
+			{
+				return true;
+			}
+
+			return false;
 		}
 
 		// Called during Input handling for movement
