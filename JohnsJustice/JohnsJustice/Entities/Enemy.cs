@@ -230,6 +230,8 @@ namespace JohnsJustice.Entities
 
 			_health = 100;
 
+			CollisionBox = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40 * 2, 55 * 2);
+
 			IsDead = false;
 			CanPunch = false;
 

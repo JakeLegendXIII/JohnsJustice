@@ -259,6 +259,7 @@ namespace JohnsJustice.Entities
 				if (!_koAnimation.IsPlaying)
 				{
 					IsDead = true;
+					OnDeath?.Invoke(this, EventArgs.Empty);
 				}
 			}
 		}	
@@ -306,6 +307,7 @@ namespace JohnsJustice.Entities
 			{
 				// broadcast message that all enemies are dead
 				_healthText.Text = "You Win!";
+				OnVictory?.Invoke(this, EventArgs.Empty);
 			}
 		}
 

@@ -63,7 +63,7 @@ namespace JohnsJustice
 		}
 
 		protected override void Initialize()
-		{			
+		{
 			Window.Title = "John's Justice: Flush with Fury";
 			_graphics.PreferredBackBufferWidth = WINDOW_WIDTH;
 			_graphics.PreferredBackBufferHeight = WINDOW_HEIGHT;
@@ -73,7 +73,7 @@ namespace JohnsJustice
 		}
 
 		protected override void LoadContent()
-		{		
+		{
 			_soundManager = new SoundManager();
 
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -96,18 +96,21 @@ namespace JohnsJustice
 			_soundManager.SetSoundtrack(new List<SoundEffectInstance>() { track1, track2 });
 
 			var hitInstance = _hit.CreateInstance();
-			var missInstance = _miss.CreateInstance();			
+			var missInstance = _miss.CreateInstance();
 
 			_enemy = new Enemy(_enemySpriteSheet, new Vector2(200, PLAYER_START_POS_Y), hitInstance, missInstance);
 			_enemy2 = new Enemy(_enemy2SpriteSheet, new Vector2(400, PLAYER_START_POS_Y), hitInstance, missInstance);
 			_enemy3 = new Enemy(_enemySpriteSheet, new Vector2(600, PLAYER_START_POS_Y), hitInstance, missInstance);
 
-			_player = new Player(_playerSpriteSheet, new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y), 
+			_player = new Player(_playerSpriteSheet, new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y),
 				hitInstance, missInstance, _enemy, _enemy2, _enemy3, _healthText);
 
 			_enemy.Player = _player;
 			_enemy2.Player = _player;
 			_enemy3.Player = _player;
+
+			_player.OnDeath += player_HasDied;
+			_player.OnVictory += player_HasWon;
 
 			_inputManager = new InputManager(_player);
 
@@ -118,15 +121,14 @@ namespace JohnsJustice
 		{
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
-			
+
 			_soundManager.PlaySoundtrack();
 
 			if (GameState == GameState.Menu)
 			{
-				HandleMenuInput(gameTime);
+				HandleReplayInput(gameTime);
 			}
-
-			if (GameState == GameState.Playing)
+			else if (GameState == GameState.Playing)
 			{
 				if (_player.State != PlayerState.KO)
 				{
@@ -138,7 +140,15 @@ namespace JohnsJustice
 				_enemy.Update(gameTime);
 				_enemy2.Update(gameTime);
 				_enemy3.Update(gameTime);
-			}			
+			}
+			else if (GameState == GameState.GameOver)
+			{
+				HandleReplayInput(gameTime);
+			}
+			else if (GameState == GameState.Credits)
+			{
+				HandleReplayInput(gameTime);
+			}
 
 			base.Update(gameTime);
 		}
@@ -202,19 +212,19 @@ namespace JohnsJustice
 			}
 		}
 
-		private void HandleMenuInput(GameTime gameTime)
+		private void HandleReplayInput(GameTime gameTime)
 		{
 			KeyboardState keyboardState = Keyboard.GetState();
 			GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
 
-			bool isPunchKeyPressed = keyboardState.IsKeyDown(Keys.Space);
+			bool isPunchKeyPressed = keyboardState.IsKeyDown(Keys.Enter);
 
-			if (isPunchKeyPressed || gamePadState.Buttons.A == ButtonState.Pressed)
+			if (isPunchKeyPressed || gamePadState.Buttons.Start == ButtonState.Pressed)
 			{
+				Reset();
 				GameState = GameState.Playing;
 			}
 		}
-
 
 		private void Reset()
 		{
@@ -225,6 +235,16 @@ namespace JohnsJustice
 			_enemy2.Reset(new Vector2(400, PLAYER_START_POS_Y));
 
 			_enemy3.Reset(new Vector2(600, PLAYER_START_POS_Y));
+		}
+
+		private void player_HasDied(object sender, EventArgs e)
+		{
+			GameState = GameState.GameOver;
+		}
+
+		private void player_HasWon(object sender, EventArgs e)
+		{
+			GameState = GameState.Credits;
 		}
 
 	}
