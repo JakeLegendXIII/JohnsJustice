@@ -43,6 +43,7 @@ namespace JohnsJustice.Entities
 		private Enemy _enemy;
 		private Enemy _enemy1;
 		private Enemy _enemy2;
+		private Enemy _enemy3;
 
 		private HealthText _healthText;
 
@@ -68,7 +69,9 @@ namespace JohnsJustice.Entities
 		}
 
 
-		public Player(Texture2D spriteSheet, Vector2 position, SoundEffectInstance hit, SoundEffectInstance miss, Enemy enemy, Enemy enemy1, Enemy enemy2, HealthText healthText)
+		public Player(Texture2D spriteSheet, Vector2 position, SoundEffectInstance hit, SoundEffectInstance miss, 
+			Enemy enemy, Enemy enemy1, Enemy enemy2, Enemy enemy3,
+			HealthText healthText)
 		{
 			State = PlayerState.Idle;
 
@@ -139,6 +142,7 @@ namespace JohnsJustice.Entities
 			_enemy = enemy;
 			_enemy1 = enemy1;
 			_enemy2 = enemy2;
+			_enemy3 = enemy3;
 
 			_healthText = healthText;
 		}
@@ -211,6 +215,12 @@ namespace JohnsJustice.Entities
 					else if (EnemyCollision2() && _hit.State != SoundState.Playing)
 					{
 						_enemy2.Hurt(30);
+
+						_hit.Play();
+					}
+					else if (EnemyCollision3() && _hit.State != SoundState.Playing)
+					{
+						_enemy3.Hurt(30);
 
 						_hit.Play();
 					}
@@ -303,9 +313,8 @@ namespace JohnsJustice.Entities
 
 		private void CheckIfEnemiesAreDead()
 		{			
-			if (_enemy.IsDead && _enemy1.IsDead && _enemy2.IsDead)
-			{
-				// broadcast message that all enemies are dead
+			if (_enemy.IsDead && _enemy1.IsDead && _enemy2.IsDead && _enemy3.IsDead)
+			{				
 				_healthText.Text = "You Win!";
 				OnVictory?.Invoke(this, EventArgs.Empty);
 			}
@@ -356,6 +365,21 @@ namespace JohnsJustice.Entities
 			return false;
 		}
 
+		private bool EnemyCollision3()
+		{
+			if (CollisionBox.Intersects(_enemy3.CollisionBox))
+			{
+				if (_enemy3.CanPunch == false)
+				{
+					_enemy3.StartFight();
+				}
+
+				return true;
+			}
+
+			return false;
+		}
+
 		public bool BeginPunch()
 		{
 			if (State == PlayerState.Punching)
@@ -372,9 +396,9 @@ namespace JohnsJustice.Entities
 			State = PlayerState.Walking;
 			_walkingAnimation.Play();
 
-			if (!(EnemyCollision() || EnemyCollision1() || EnemyCollision2()))
+			if (!(EnemyCollision() || EnemyCollision1() || EnemyCollision2() || EnemyCollision3()))
 			{
-				Position = new Vector2(Position.X + 35f * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
+				Position = new Vector2(Position.X + 70f * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
 			}
 
 			return true;
@@ -385,7 +409,7 @@ namespace JohnsJustice.Entities
 			State = PlayerState.Walking;
 			_walkingAnimation.Play();
 
-			Position = new Vector2(Position.X - 65f * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
+			Position = new Vector2(Position.X - 105f * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
 
 			return true;
 		}

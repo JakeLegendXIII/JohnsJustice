@@ -16,6 +16,7 @@ namespace JohnsJustice
 		private const string PLAYER_SPRITE_SHEET = "Sprites/player";
 		private const string ENEMY_SPRITE_SHEET = "Sprites/enemy-punk";
 		private const string ENEMY2_SPRITE_SHEET = "Sprites/enemy-punk2";
+		private const string ENEMY3_SPRITE_SHEET = "Sprites/enemy-punk3";
 		private const string MUSIC = "Music/NoSurvivors";
 		private const string MUSIC1 = "Music/CircuitBreaker";
 		private const string HIT = "SFX/Hit";
@@ -38,9 +39,11 @@ namespace JohnsJustice
 		private Enemy _enemy;
 		private Enemy _enemy2;
 		private Enemy _enemy3;
+		private Enemy _enemy4;
 		private Texture2D _playerSpriteSheet;
 		private Texture2D _enemySpriteSheet;
 		private Texture2D _enemy2SpriteSheet;
+		private Texture2D _enemy3SpriteSheet;
 		private Texture2D _menuScreen;
 		private Texture2D _background;
 
@@ -81,6 +84,7 @@ namespace JohnsJustice
 			_playerSpriteSheet = Content.Load<Texture2D>(PLAYER_SPRITE_SHEET);
 			_enemySpriteSheet = Content.Load<Texture2D>(ENEMY_SPRITE_SHEET);
 			_enemy2SpriteSheet = Content.Load<Texture2D>(ENEMY2_SPRITE_SHEET);
+			_enemy3SpriteSheet = Content.Load<Texture2D>(ENEMY3_SPRITE_SHEET);
 			_menuScreen = Content.Load<Texture2D>(MENU_SCREEN);
 			_background = Content.Load<Texture2D>(BACKGROUND);
 
@@ -101,13 +105,15 @@ namespace JohnsJustice
 			_enemy = new Enemy(_enemySpriteSheet, new Vector2(200, PLAYER_START_POS_Y), hitInstance, missInstance);
 			_enemy2 = new Enemy(_enemy2SpriteSheet, new Vector2(400, PLAYER_START_POS_Y), hitInstance, missInstance);
 			_enemy3 = new Enemy(_enemySpriteSheet, new Vector2(600, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy4 = new Enemy(_enemy3SpriteSheet, new Vector2(850, PLAYER_START_POS_Y), hitInstance, missInstance);
 
 			_player = new Player(_playerSpriteSheet, new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y),
-				hitInstance, missInstance, _enemy, _enemy2, _enemy3, _healthText);
+				hitInstance, missInstance, _enemy, _enemy2, _enemy3, _enemy4, _healthText);
 
 			_enemy.Player = _player;
 			_enemy2.Player = _player;
 			_enemy3.Player = _player;
+			_enemy4.Player = _player;
 
 			_player.OnDeath += player_HasDied;
 			_player.OnVictory += player_HasWon;
@@ -140,6 +146,7 @@ namespace JohnsJustice
 				_enemy.Update(gameTime);
 				_enemy2.Update(gameTime);
 				_enemy3.Update(gameTime);
+				_enemy4.Update(gameTime);
 			}
 			else if (GameState == GameState.GameOver)
 			{
@@ -155,7 +162,7 @@ namespace JohnsJustice
 
 		protected override void Draw(GameTime gameTime)
 		{
-			GraphicsDevice.Clear(Color.CornflowerBlue);
+			// GraphicsDevice.Clear(Color.CornflowerBlue);
 
 			_spriteBatch.Begin();
 
@@ -171,12 +178,13 @@ namespace JohnsJustice
 				_enemy.Draw(_spriteBatch, gameTime);
 				_enemy2.Draw(_spriteBatch, gameTime);
 				_enemy3.Draw(_spriteBatch, gameTime);
+				_enemy4.Draw(_spriteBatch, gameTime);
 
 				_healthText.Draw(_spriteBatch, gameTime);
 			}
 			else if (GameState == GameState.GameOver)
 			{
-				GraphicsDevice.Clear(Color.Red);
+				GraphicsDevice.Clear(Color.MonoGameOrange);
 			}
 			else if (GameState == GameState.Credits)
 			{
@@ -235,6 +243,8 @@ namespace JohnsJustice
 			_enemy2.Reset(new Vector2(400, PLAYER_START_POS_Y));
 
 			_enemy3.Reset(new Vector2(600, PLAYER_START_POS_Y));
+
+			_enemy4.Reset(new Vector2(850, PLAYER_START_POS_Y));
 		}
 
 		private void player_HasDied(object sender, EventArgs e)
