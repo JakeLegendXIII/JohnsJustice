@@ -50,6 +50,9 @@ namespace JohnsJustice.Entities
 
 		public bool IsDead = false;
 
+		public EventHandler OnDeath;
+		public EventHandler OnVictory;
+
 		public PlayerState State { get; set; }
 
 		public int DrawOrder => 1;
@@ -105,9 +108,10 @@ namespace JohnsJustice.Entities
 			_walkingAnimation = new SpriteAnimation();
 			_walkingAnimation.ShouldLoop = false;
 			_walkingAnimation.AddFrame(_walkingSprite1, 0);
-			_walkingAnimation.AddFrame(_walkingSprite2, 0.1f);
-			_walkingAnimation.AddFrame(_walkingSprite3, 0.3f);
-			_walkingAnimation.AddFrame(_walkingSprite4, 0.5f);
+			_walkingAnimation.AddFrame(_walkingSprite2, 0.2f);
+			_walkingAnimation.AddFrame(_walkingSprite3, 0.4f);
+			_walkingAnimation.AddFrame(_walkingSprite4, 0.6f);
+			_walkingAnimation.AddFrame(_walkingSprite1, 0.8f);
 			_walkingAnimation.Play();
 
 			_hurtSprite1 = new Sprite(spriteSheet, 1081, 14, 33, 50);
@@ -141,7 +145,7 @@ namespace JohnsJustice.Entities
 
 		public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
 		{
-			spriteBatch.Draw(_texture, CollisionBox, Color.White);
+			// spriteBatch.Draw(_texture, CollisionBox, Color.White);
 
 			if (IsDead)
 			{
