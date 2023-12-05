@@ -224,6 +224,20 @@ namespace JohnsJustice.Entities
 			}
 		}
 
+		public void Reset(Vector2 position)
+		{
+			Position = position;
+
+			_health = 100;
+
+			IsDead = false;
+			CanPunch = false;
+
+			State = EnemyState.Idle;
+
+			_idleAnimation.Play();			
+		}
+
 		public void StartFight()
 		{
 			CanPunch = true;

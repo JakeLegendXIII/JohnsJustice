@@ -9,6 +9,7 @@ namespace JohnsJustice.System
 		public bool _isBlocked;
 		private Player _player;
 		private KeyboardState _previousKeyboardState;
+		private GamePadState _previousGamePadState;
 
 		public InputManager(Player player)
 		{
@@ -22,9 +23,11 @@ namespace JohnsJustice.System
 			GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
 
 			bool isPunchKeyPressed = keyboardState.IsKeyDown(Keys.Space);
+			bool isPunchButtonPressed = gamePadState.Buttons.A == ButtonState.Pressed;
 			bool wasPunchKeyPressed = _previousKeyboardState.IsKeyDown(Keys.Space);
+			bool wasPunchButtonPressed = _previousGamePadState.Buttons.A == ButtonState.Pressed;
 
-			if (isPunchKeyPressed || gamePadState.Buttons.A == ButtonState.Pressed)
+			if ((wasPunchKeyPressed || wasPunchButtonPressed) && (isPunchKeyPressed || isPunchButtonPressed))
 			{
 				if (_player.State != PlayerState.Punching)
 				{
@@ -40,6 +43,9 @@ namespace JohnsJustice.System
 			{
 				_player.WalkRight(gameTime);
 			}
+
+			_previousGamePadState = gamePadState;
+			_previousKeyboardState = keyboardState;
 		}
 	}
 }

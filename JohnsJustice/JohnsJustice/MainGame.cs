@@ -21,6 +21,8 @@ namespace JohnsJustice
 		private const string HIT = "SFX/Hit";
 		private const string MISS = "SFX/Miss";
 		private const string TextFont = "Fonts/File";
+		private const string BACKGROUND = "Graphics/background";
+		private const string MENU_SCREEN = "Graphics/jjtitle";
 
 		public const int WINDOW_WIDTH = 1200; // 600
 		public const int WINDOW_HEIGHT = 300; // 150
@@ -39,6 +41,8 @@ namespace JohnsJustice
 		private Texture2D _playerSpriteSheet;
 		private Texture2D _enemySpriteSheet;
 		private Texture2D _enemy2SpriteSheet;
+		private Texture2D _menuScreen;
+		private Texture2D _background;
 
 		private SoundEffect _music;
 		private SoundEffect _music1;
@@ -77,6 +81,8 @@ namespace JohnsJustice
 			_playerSpriteSheet = Content.Load<Texture2D>(PLAYER_SPRITE_SHEET);
 			_enemySpriteSheet = Content.Load<Texture2D>(ENEMY_SPRITE_SHEET);
 			_enemy2SpriteSheet = Content.Load<Texture2D>(ENEMY2_SPRITE_SHEET);
+			_menuScreen = Content.Load<Texture2D>(MENU_SCREEN);
+			_background = Content.Load<Texture2D>(BACKGROUND);
 
 			_music = Content.Load<SoundEffect>(MUSIC);
 			_music1 = Content.Load<SoundEffect>(MUSIC1);
@@ -93,8 +99,8 @@ namespace JohnsJustice
 			var missInstance = _miss.CreateInstance();			
 
 			_enemy = new Enemy(_enemySpriteSheet, new Vector2(200, PLAYER_START_POS_Y), hitInstance, missInstance);
-			_enemy2 = new Enemy(_enemy2SpriteSheet, new Vector2(600, PLAYER_START_POS_Y), hitInstance, missInstance);
-			_enemy3 = new Enemy(_enemySpriteSheet, new Vector2(800, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy2 = new Enemy(_enemy2SpriteSheet, new Vector2(400, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy3 = new Enemy(_enemySpriteSheet, new Vector2(600, PLAYER_START_POS_Y), hitInstance, missInstance);
 
 			_player = new Player(_playerSpriteSheet, new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y), 
 				hitInstance, missInstance, _enemy, _enemy2, _enemy3, _healthText);
@@ -105,7 +111,7 @@ namespace JohnsJustice
 
 			_inputManager = new InputManager(_player);
 
-			GameState = GameState.Playing;
+			GameState = GameState.Menu;
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -145,10 +151,12 @@ namespace JohnsJustice
 
 			if (GameState == GameState.Menu)
 			{
-				GraphicsDevice.Clear(Color.MonoGameOrange);
+				_spriteBatch.Draw(_menuScreen, new Vector2(0, 0), Color.White);
 			}
 			else if (GameState == GameState.Playing)
 			{
+				_spriteBatch.Draw(_background, new Rectangle(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT), new Rectangle(0, 0, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), Color.White);
+
 				_player.Draw(_spriteBatch, gameTime);
 				_enemy.Draw(_spriteBatch, gameTime);
 				_enemy2.Draw(_spriteBatch, gameTime);
@@ -210,16 +218,13 @@ namespace JohnsJustice
 
 		private void Reset()
 		{
-			_player.Position = new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y);
-			_player.IsDead = false;
-			_player.State = PlayerState.Idle;
-			//_player.Health = 100;
+			_player.Reset(new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y));
 
-			_enemy.Position = new Vector2(200, PLAYER_START_POS_Y);
-			_enemy.IsDead = false;
-			_enemy.State = EnemyState.Idle;
-			//_enemy.Health = 100;
+			_enemy.Reset(new Vector2(200, PLAYER_START_POS_Y));
 
+			_enemy2.Reset(new Vector2(400, PLAYER_START_POS_Y));
+
+			_enemy3.Reset(new Vector2(600, PLAYER_START_POS_Y));
 		}
 
 	}

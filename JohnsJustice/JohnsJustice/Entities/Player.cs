@@ -105,9 +105,9 @@ namespace JohnsJustice.Entities
 			_walkingAnimation = new SpriteAnimation();
 			_walkingAnimation.ShouldLoop = false;
 			_walkingAnimation.AddFrame(_walkingSprite1, 0);
-			_walkingAnimation.AddFrame(_walkingSprite2, 0.2f);
-			_walkingAnimation.AddFrame(_walkingSprite3, 0.5f);
-			_walkingAnimation.AddFrame(_walkingSprite4, 0.75f);
+			_walkingAnimation.AddFrame(_walkingSprite2, 0.1f);
+			_walkingAnimation.AddFrame(_walkingSprite3, 0.3f);
+			_walkingAnimation.AddFrame(_walkingSprite4, 0.5f);
 			_walkingAnimation.Play();
 
 			_hurtSprite1 = new Sprite(spriteSheet, 1081, 14, 33, 50);
@@ -281,11 +281,27 @@ namespace JohnsJustice.Entities
 			}
 		}
 
+		public void Reset(Vector2 position)
+		{
+			Position = position;
+
+			_health = 100;
+
+			IsDead = false;
+
+			State = PlayerState.Idle;
+
+			_idleAnimation.Play();
+
+			_healthText.Text = "Health: " + _health;
+		}
+
 		private void CheckIfEnemiesAreDead()
 		{			
 			if (_enemy.IsDead && _enemy1.IsDead && _enemy2.IsDead)
 			{
 				// broadcast message that all enemies are dead
+				_healthText.Text = "You Win!";
 			}
 		}
 
