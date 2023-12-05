@@ -5,6 +5,38 @@
     <RollForward>Major</RollForward>
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
+    <BeautySharedRuntimeMode>False</BeautySharedRuntimeMode>
+    <!-- beauty into sub-directory, default is libs, quote with "" if contains space  -->
+    <BeautyLibsDir Condition="$(BeautySharedRuntimeMode) == 'True'">../libraries</BeautyLibsDir>
+    <BeautyLibsDir Condition="$(BeautySharedRuntimeMode) != 'True'">./libraries</BeautyLibsDir>
+    <!-- dlls that you don't want to be moved or can not be moved -->
+    <!-- <BeautyExcludes>dll1.dll;lib*;...</BeautyExcludes> -->
+    <!-- dlls that end users never needed, so hide them -->
+    <!-- <BeautyHiddens>hostfxr;hostpolicy;*.deps.json;*.runtimeconfig*.json</BeautyHiddens> -->
+    <!-- set to True if you want to disable -->
+    <DisableBeauty>False</DisableBeauty>
+    <!-- set to False if you want to beauty on build -->
+    <BeautyOnPublishOnly>False</BeautyOnPublishOnly>
+    <!-- set to True if you want to allow 3rd debuggers(like dnSpy) debugs the app -->
+    <BeautyEnableDebugging>False</BeautyEnableDebugging>
+    <!-- the patch can reduce the file count -->
+    <!-- set to False if you want to disable -->
+    <!-- SCD Mode Feature Only -->
+    <BeautyUsePatch>True</BeautyUsePatch>
+    <!-- App Entry Dll = BeautyDir + BeautyAppHostDir + BeautyAppHostEntry -->
+    <!-- see https://github.com/nulastudio/NetBeauty2#customize-apphost for more details -->
+    <!-- relative path based on AppHostDir -->
+    <!-- .NET Core Non Single-File Only -->
+    <!-- <BeautyAppHostEntry>bin/MyApp.dll</BeautyAppHostEntry> -->
+    <!-- relative path based on BeautyDir -->
+    <!-- .NET Core Non Single-File Only -->
+    <!-- <BeautyAppHostDir>..</BeautyAppHostDir> -->
+    <!-- <BeautyAfterTasks></BeautyAfterTasks> -->
+    <!-- valid values: Error|Detail|Info -->
+    <BeautyLogLevel>Info</BeautyLogLevel>
+    <!-- set to a repo mirror if you have troble in connecting github -->
+    <!-- <BeautyGitCDN>https://gitee.com/liesauer/HostFXRPatcher</BeautyGitCDN> -->
+    <!-- <BeautyGitTree>master</BeautyGitTree> -->
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -22,6 +54,7 @@
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
+    <PackageReference Include="nulastudio.NetBeauty" Version="2.1.4.1" />
   </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />
