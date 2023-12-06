@@ -39,7 +39,7 @@ namespace JohnsJustice.Entities
 		private SoundEffectInstance _hit;
 		private SoundEffectInstance _miss;
 
-		private Texture2D _texture;
+		// private Texture2D _texture;
 
 		private List<Enemy> _enemies;
 
@@ -134,8 +134,8 @@ namespace JohnsJustice.Entities
 			_koAnimation.AddFrame(_hurtSprite4, 0.6f);
 			_koAnimation.Play();
 
-			_texture = new Texture2D(spriteSheet.GraphicsDevice, 1, 1);
-			_texture.SetData(new Color[] { Color.MonoGameOrange });
+			//_texture = new Texture2D(spriteSheet.GraphicsDevice, 1, 1);
+			//_texture.SetData(new Color[] { Color.MonoGameOrange });
 
 			_enemies = enemies;
 

@@ -41,7 +41,7 @@ namespace JohnsJustice.Entities
 		private SoundEffectInstance _miss;
 		public int DrawOrder => 1;
 
-		private Texture2D _texture;
+		//private Texture2D _texture;
 
 		private int _health = 100;
 
@@ -121,8 +121,8 @@ namespace JohnsJustice.Entities
 
 			CollisionBox = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40 * 2, 55 * 2);
 
-			_texture = new Texture2D(spriteSheet.GraphicsDevice, 1, 1);
-			_texture.SetData(new Color[] { Color.MonoGameOrange });
+			//_texture = new Texture2D(spriteSheet.GraphicsDevice, 1, 1);
+			//_texture.SetData(new Color[] { Color.MonoGameOrange });
 
 			State = EnemyState.Idle;
 			_random = new Random();
@@ -130,7 +130,7 @@ namespace JohnsJustice.Entities
 
 		public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
 		{
-			// spriteBatch.Draw(_texture, CollisionBox, Color.White);
+			//spriteBatch.Draw(_texture, CollisionBox, Color.White);
 
 			if (IsDead)
 			{
@@ -166,18 +166,29 @@ namespace JohnsJustice.Entities
 			{
 				_koAnimation.Update(gameTime);
 				return;
-			}
+			}		
 
 			if (State == EnemyState.Idle)
 			{
 				_idleAnimation.Update(gameTime);
 
 				if (CanPunch)
-				{
-					if (_random.Next(0, 100) > 97)
+				{				
+					if (PlayerCollision())
 					{
-						State = EnemyState.Punching;
-						_punchAnimation.Play();
+						if (_random.Next(0, 100) > 96)
+						{
+							State = EnemyState.Punching;
+							_punchAnimation.Play();
+						}	
+					}
+					else
+					{
+						if (_random.Next(0, 100) > 97)
+						{
+							State = EnemyState.Walking;
+							_walkingAnimation.Play();
+						}
 					}
 				}
 			}
@@ -209,6 +220,12 @@ namespace JohnsJustice.Entities
 			else if (State == EnemyState.Walking)
 			{
 				_walkingAnimation.Update(gameTime);
+
+				if (!PlayerCollision())
+				{
+					Position = new Vector2(Position.X - 75 * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
+					CollisionBox = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40 * 2, 55 * 2);
+				}				
 
 				if (!_walkingAnimation.IsPlaying)
 				{
@@ -289,9 +306,10 @@ namespace JohnsJustice.Entities
 			State = EnemyState.Walking;
 			_walkingAnimation.Play();
 
-			Position = new Vector2(Position.X - 1, Position.Y);
+			Position = new Vector2(Position.X - 75 * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
 
 			return true;
+			
 		}
 
 	}
