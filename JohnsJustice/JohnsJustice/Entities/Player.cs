@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 
 namespace JohnsJustice.Entities
 {
@@ -40,10 +41,7 @@ namespace JohnsJustice.Entities
 
 		private Texture2D _texture;
 
-		private Enemy _enemy;
-		private Enemy _enemy1;
-		private Enemy _enemy2;
-		private Enemy _enemy3;
+		private List<Enemy> _enemies;
 
 		private HealthText _healthText;
 
@@ -69,8 +67,7 @@ namespace JohnsJustice.Entities
 		}
 
 
-		public Player(Texture2D spriteSheet, Vector2 position, SoundEffectInstance hit, SoundEffectInstance miss, 
-			Enemy enemy, Enemy enemy1, Enemy enemy2, Enemy enemy3,
+		public Player(Texture2D spriteSheet, Vector2 position, SoundEffectInstance hit, SoundEffectInstance miss, List<Enemy> enemies,
 			HealthText healthText)
 		{
 			State = PlayerState.Idle;
@@ -139,10 +136,8 @@ namespace JohnsJustice.Entities
 
 			_texture = new Texture2D(spriteSheet.GraphicsDevice, 1, 1);
 			_texture.SetData(new Color[] { Color.MonoGameOrange });
-			_enemy = enemy;
-			_enemy1 = enemy1;
-			_enemy2 = enemy2;
-			_enemy3 = enemy3;
+
+			_enemies = enemies;
 
 			_healthText = healthText;
 		}
@@ -200,29 +195,17 @@ namespace JohnsJustice.Entities
 
 				if (_punchAnimation.CurrentFrame == _punchAnimation.GetFrame(2))
 				{
-					if (EnemyCollision() && _hit.State != SoundState.Playing)
+					if (_hit.State != SoundState.Playing)
 					{
-						_enemy.Hurt(30);
+						foreach (var enemy in _enemies)
+						{
+							if (EnemyCollision(enemy))
+							{
+								enemy.Hurt(30);
 
-						_hit.Play();
-					}
-					else if (EnemyCollision1() && _hit.State != SoundState.Playing)
-					{
-						_enemy1.Hurt(30);
-
-						_hit.Play();
-					}
-					else if (EnemyCollision2() && _hit.State != SoundState.Playing)
-					{
-						_enemy2.Hurt(30);
-
-						_hit.Play();
-					}
-					else if (EnemyCollision3() && _hit.State != SoundState.Playing)
-					{
-						_enemy3.Hurt(30);
-
-						_hit.Play();
+								_hit.Play();
+							}
+						}
 					}
 					else if (_miss.State != SoundState.Playing)
 					{
@@ -272,7 +255,7 @@ namespace JohnsJustice.Entities
 					OnDeath?.Invoke(this, EventArgs.Empty);
 				}
 			}
-		}	
+		}
 
 		public void Hurt(int damage)
 		{
@@ -312,21 +295,31 @@ namespace JohnsJustice.Entities
 		}
 
 		private void CheckIfEnemiesAreDead()
-		{			
-			if (_enemy.IsDead && _enemy1.IsDead && _enemy2.IsDead && _enemy3.IsDead)
-			{				
+		{
+			bool allEnemiesDead = true;
+			foreach (var enemy in _enemies)
+			{
+				if (enemy.IsDead == false)
+				{
+					allEnemiesDead = false;
+					break;
+				}
+			}
+
+			if (allEnemiesDead)
+			{
 				_healthText.Text = "You Win!";
 				OnVictory?.Invoke(this, EventArgs.Empty);
 			}
 		}
 
-		private bool EnemyCollision()
+		private bool EnemyCollision(Enemy enemy)
 		{
-			if (CollisionBox.Intersects(_enemy.CollisionBox))
+			if (CollisionBox.Intersects(enemy.CollisionBox))
 			{
-				if (_enemy.CanPunch == false)
+				if (enemy.CanPunch == false)
 				{
-					_enemy.StartFight();
+					enemy.StartFight();
 				}
 
 				return true;
@@ -335,50 +328,7 @@ namespace JohnsJustice.Entities
 			return false;
 		}
 
-		private bool EnemyCollision1()
-		{
-			if (CollisionBox.Intersects(_enemy1.CollisionBox))
-			{
-				if (_enemy1.CanPunch == false)
-				{
-					_enemy1.StartFight();
-				}
 
-				return true;
-			}
-
-			return false;
-		}
-
-		private bool EnemyCollision2()
-		{
-			if (CollisionBox.Intersects(_enemy2.CollisionBox))
-			{
-				if (_enemy2.CanPunch == false)
-				{
-					_enemy2.StartFight();
-				}
-
-				return true;
-			}
-
-			return false;
-		}
-
-		private bool EnemyCollision3()
-		{
-			if (CollisionBox.Intersects(_enemy3.CollisionBox))
-			{
-				if (_enemy3.CanPunch == false)
-				{
-					_enemy3.StartFight();
-				}
-
-				return true;
-			}
-
-			return false;
-		}
 
 		public bool BeginPunch()
 		{
@@ -396,7 +346,17 @@ namespace JohnsJustice.Entities
 			State = PlayerState.Walking;
 			_walkingAnimation.Play();
 
-			if (!(EnemyCollision() || EnemyCollision1() || EnemyCollision2() || EnemyCollision3()))
+			bool canWalk = true;
+
+			foreach (var enemy in _enemies)
+			{
+				if (EnemyCollision(enemy))
+				{
+					canWalk = false;
+				}
+			}
+
+			if (canWalk)
 			{
 				Position = new Vector2(Position.X + 70f * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
 			}

@@ -37,6 +37,8 @@
     <!-- set to a repo mirror if you have troble in connecting github -->
     <!-- <BeautyGitCDN>https://gitee.com/liesauer/HostFXRPatcher</BeautyGitCDN> -->
     <!-- <BeautyGitTree>master</BeautyGitTree> -->
+    <NoBeautyFlag>True</NoBeautyFlag>
+    <BeautyExcludes>SDL2*;libSDL2*;sdl2*;soft_oal*;openal*;MonoGame.Framework*</BeautyExcludes>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>

@@ -23,7 +23,9 @@ namespace JohnsJustice
 		private const string MISS = "SFX/Miss";
 		private const string TextFont = "Fonts/File";
 		private const string BACKGROUND = "Graphics/background";
-		private const string MENU_SCREEN = "Graphics/jjtitle";
+		private const string MENU_SCREEN = "Graphics/jjtitle2";
+		private const string GAME_OVER_SCREEN = "Graphics/gameover";
+		private const string CREDIT_SCREEN = "Graphics/credits";
 
 		public const int WINDOW_WIDTH = 1200; // 600
 		public const int WINDOW_HEIGHT = 300; // 150
@@ -40,12 +42,15 @@ namespace JohnsJustice
 		private Enemy _enemy2;
 		private Enemy _enemy3;
 		private Enemy _enemy4;
+		private List<Enemy> _enemyList;
 		private Texture2D _playerSpriteSheet;
 		private Texture2D _enemySpriteSheet;
 		private Texture2D _enemy2SpriteSheet;
 		private Texture2D _enemy3SpriteSheet;
 		private Texture2D _menuScreen;
 		private Texture2D _background;
+		private Texture2D _gameOverScreen;
+		private Texture2D _creditScreen;
 
 		private SoundEffect _music;
 		private SoundEffect _music1;
@@ -87,6 +92,8 @@ namespace JohnsJustice
 			_enemy3SpriteSheet = Content.Load<Texture2D>(ENEMY3_SPRITE_SHEET);
 			_menuScreen = Content.Load<Texture2D>(MENU_SCREEN);
 			_background = Content.Load<Texture2D>(BACKGROUND);
+			_gameOverScreen = Content.Load<Texture2D>(GAME_OVER_SCREEN);
+			_creditScreen = Content.Load<Texture2D>(CREDIT_SCREEN);
 
 			_music = Content.Load<SoundEffect>(MUSIC);
 			_music1 = Content.Load<SoundEffect>(MUSIC1);
@@ -107,8 +114,16 @@ namespace JohnsJustice
 			_enemy3 = new Enemy(_enemySpriteSheet, new Vector2(600, PLAYER_START_POS_Y), hitInstance, missInstance);
 			_enemy4 = new Enemy(_enemy3SpriteSheet, new Vector2(850, PLAYER_START_POS_Y), hitInstance, missInstance);
 
+			_enemyList = new List<Enemy>
+			{
+				_enemy,
+				_enemy2,
+				_enemy3,
+				_enemy4
+			};
+
 			_player = new Player(_playerSpriteSheet, new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y),
-				hitInstance, missInstance, _enemy, _enemy2, _enemy3, _enemy4, _healthText);
+				hitInstance, missInstance, _enemyList, _healthText);
 
 			_enemy.Player = _player;
 			_enemy2.Player = _player;
@@ -184,11 +199,11 @@ namespace JohnsJustice
 			}
 			else if (GameState == GameState.GameOver)
 			{
-				GraphicsDevice.Clear(Color.MonoGameOrange);
+				_spriteBatch.Draw(_gameOverScreen, new Vector2(0, 0), Color.White);
 			}
 			else if (GameState == GameState.Credits)
 			{
-				GraphicsDevice.Clear(Color.Green);
+				_spriteBatch.Draw(_creditScreen, new Vector2(0, 0), Color.White);
 			}
 
 			_spriteBatch.End();
@@ -245,6 +260,13 @@ namespace JohnsJustice
 			_enemy3.Reset(new Vector2(600, PLAYER_START_POS_Y));
 
 			_enemy4.Reset(new Vector2(850, PLAYER_START_POS_Y));
+		}
+
+		private void MoveEnemyForward()
+		{
+			// Pick enemy at random who is not in fight yet, or already moving or colliding with another enemy
+			// Move enemy towards player and trigger Moving animation
+
 		}
 
 		private void player_HasDied(object sender, EventArgs e)
