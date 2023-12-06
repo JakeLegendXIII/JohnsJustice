@@ -50,7 +50,6 @@ namespace JohnsJustice.Entities
 		public bool IsDead = false;
 
 		public EventHandler OnDeath;
-		public EventHandler OnVictory;
 
 		public PlayerState State { get; set; }
 
@@ -65,7 +64,6 @@ namespace JohnsJustice.Entities
 				return box;
 			}
 		}
-
 
 		public Player(Texture2D spriteSheet, Vector2 position, SoundEffectInstance hit, SoundEffectInstance miss, List<Enemy> enemies,
 			HealthText healthText)
@@ -182,8 +180,6 @@ namespace JohnsJustice.Entities
 				return;
 			}
 
-			CheckIfEnemiesAreDead();
-
 			if (State == PlayerState.Punching)
 			{
 				if (!_punchAnimation.IsPlaying)
@@ -292,25 +288,6 @@ namespace JohnsJustice.Entities
 			_idleAnimation.Play();
 
 			_healthText.Text = "Health: " + _health;
-		}
-
-		private void CheckIfEnemiesAreDead()
-		{
-			bool allEnemiesDead = true;
-			foreach (var enemy in _enemies)
-			{
-				if (enemy.IsDead == false)
-				{
-					allEnemiesDead = false;
-					break;
-				}
-			}
-
-			if (allEnemiesDead)
-			{
-				_healthText.Text = "You Win!";
-				OnVictory?.Invoke(this, EventArgs.Empty);
-			}
 		}
 
 		private bool EnemyCollision(Enemy enemy)

@@ -42,6 +42,7 @@ namespace JohnsJustice
 		private Enemy _enemy2;
 		private Enemy _enemy3;
 		private Enemy _enemy4;
+		private Enemy _enemy5;
 		private List<Enemy> _enemyList;
 		private Texture2D _playerSpriteSheet;
 		private Texture2D _enemySpriteSheet;
@@ -62,6 +63,9 @@ namespace JohnsJustice
 		private InputManager _inputManager;
 
 		private HealthText _healthText;
+
+		private const float _victoryDelay = 3f;
+		private float _remainingVictoryDelay = _victoryDelay;
 
 		public MainGame()
 		{
@@ -113,13 +117,15 @@ namespace JohnsJustice
 			_enemy2 = new Enemy(_enemy2SpriteSheet, new Vector2(400, PLAYER_START_POS_Y), hitInstance, missInstance);
 			_enemy3 = new Enemy(_enemySpriteSheet, new Vector2(600, PLAYER_START_POS_Y), hitInstance, missInstance);
 			_enemy4 = new Enemy(_enemy3SpriteSheet, new Vector2(850, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy5 = new Enemy(_enemy2SpriteSheet, new Vector2(1000, PLAYER_START_POS_Y), hitInstance, missInstance);
 
 			_enemyList = new List<Enemy>
 			{
 				_enemy,
 				_enemy2,
 				_enemy3,
-				_enemy4
+				_enemy4,
+				_enemy5
 			};
 
 			_player = new Player(_playerSpriteSheet, new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y),
@@ -129,9 +135,9 @@ namespace JohnsJustice
 			_enemy2.Player = _player;
 			_enemy3.Player = _player;
 			_enemy4.Player = _player;
+			_enemy5.Player = _player;
 
 			_player.OnDeath += player_HasDied;
-			_player.OnVictory += player_HasWon;
 
 			_inputManager = new InputManager(_player);
 
@@ -157,18 +163,21 @@ namespace JohnsJustice
 				}
 				KeepPlayerInBounds();
 
+				CheckIfEnemiesAreDead(gameTime);
+
 				_player.Update(gameTime);
 				_enemy.Update(gameTime);
 				_enemy2.Update(gameTime);
 				_enemy3.Update(gameTime);
 				_enemy4.Update(gameTime);
+				_enemy5.Update(gameTime);
 			}
 			else if (GameState == GameState.GameOver)
 			{
 				HandleReplayInput(gameTime);
 			}
 			else if (GameState == GameState.Credits)
-			{
+			{				
 				HandleReplayInput(gameTime);
 			}
 
@@ -194,6 +203,7 @@ namespace JohnsJustice
 				_enemy2.Draw(_spriteBatch, gameTime);
 				_enemy3.Draw(_spriteBatch, gameTime);
 				_enemy4.Draw(_spriteBatch, gameTime);
+				_enemy5.Draw(_spriteBatch, gameTime);
 
 				_healthText.Draw(_spriteBatch, gameTime);
 			}
@@ -249,17 +259,47 @@ namespace JohnsJustice
 			}
 		}
 
+		private void CheckIfEnemiesAreDead(GameTime gameTime)
+		{
+			bool allEnemiesDead = true;
+			foreach (var enemy in _enemyList)
+			{
+				if (enemy.IsDead == false)
+				{
+					allEnemiesDead = false;
+					break;
+				}
+			}
+
+			if (allEnemiesDead)
+			{
+				_healthText.Text = "You Win!";
+
+				var timer = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+				_remainingVictoryDelay -= timer;
+
+				if (_remainingVictoryDelay <= 0)
+				{
+					GameState = GameState.Credits;
+					_remainingVictoryDelay = 0;
+				}				
+			}
+		}
+
 		private void Reset()
 		{
 			_player.Reset(new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y));
 
 			_enemy.Reset(new Vector2(200, PLAYER_START_POS_Y));
 
-			_enemy2.Reset(new Vector2(500, PLAYER_START_POS_Y));
+			_enemy2.Reset(new Vector2(400, PLAYER_START_POS_Y));
 
-			_enemy3.Reset(new Vector2(700, PLAYER_START_POS_Y));
+			_enemy3.Reset(new Vector2(600, PLAYER_START_POS_Y));
 
-			_enemy4.Reset(new Vector2(950, PLAYER_START_POS_Y));
+			_enemy4.Reset(new Vector2(850, PLAYER_START_POS_Y));
+
+			_enemy5.Reset(new Vector2(1000, PLAYER_START_POS_Y));
 		}
 
 		private void MoveEnemyForward()
@@ -272,11 +312,6 @@ namespace JohnsJustice
 		private void player_HasDied(object sender, EventArgs e)
 		{
 			GameState = GameState.GameOver;
-		}
-
-		private void player_HasWon(object sender, EventArgs e)
-		{
-			GameState = GameState.Credits;
 		}
 
 	}
