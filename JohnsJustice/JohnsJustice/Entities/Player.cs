@@ -97,7 +97,7 @@ namespace JohnsJustice.Entities
 			_punchAnimation.AddFrame(_punchSprite1, 0);
 			_punchAnimation.AddFrame(_punchSprite2, 0.1f);
 			_punchAnimation.AddFrame(_punchSprite3, 0.4f);
-			_punchAnimation.AddFrame(_punchSprite1, 0.6f);
+			_punchAnimation.AddFrame(_punchSprite1, 0.9f);
 			_punchAnimation.Play();
 
 			_walkingSprite1 = new Sprite(spriteSheet, 415, 14, 35, 50);

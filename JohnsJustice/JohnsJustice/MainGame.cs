@@ -255,11 +255,11 @@ namespace JohnsJustice
 
 			_enemy.Reset(new Vector2(200, PLAYER_START_POS_Y));
 
-			_enemy2.Reset(new Vector2(400, PLAYER_START_POS_Y));
+			_enemy2.Reset(new Vector2(500, PLAYER_START_POS_Y));
 
-			_enemy3.Reset(new Vector2(600, PLAYER_START_POS_Y));
+			_enemy3.Reset(new Vector2(700, PLAYER_START_POS_Y));
 
-			_enemy4.Reset(new Vector2(850, PLAYER_START_POS_Y));
+			_enemy4.Reset(new Vector2(950, PLAYER_START_POS_Y));
 		}
 
 		private void MoveEnemyForward()
