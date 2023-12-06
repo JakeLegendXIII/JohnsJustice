@@ -67,6 +67,9 @@ namespace JohnsJustice
 		private const float _victoryDelay = 3f;
 		private float _remainingVictoryDelay = _victoryDelay;
 
+		private const float _enemyMoveDelay = 9f;
+		private float _remainingEnemyMoveDelay = _enemyMoveDelay;
+
 		public MainGame()
 		{
 			_graphics = new GraphicsDeviceManager(this);
@@ -137,7 +140,7 @@ namespace JohnsJustice
 			_enemy4.Player = _player;
 			_enemy5.Player = _player;
 
-			_player.OnDeath += player_HasDied;
+			// _player.OnDeath += player_HasDied;
 
 			_inputManager = new InputManager(_player);
 
@@ -164,6 +167,7 @@ namespace JohnsJustice
 				KeepPlayerInBounds();
 
 				CheckIfEnemiesAreDead(gameTime);
+				CheckIfPlayerIsDead(gameTime);
 
 				_player.Update(gameTime);
 				_enemy.Update(gameTime);
@@ -171,6 +175,8 @@ namespace JohnsJustice
 				_enemy3.Update(gameTime);
 				_enemy4.Update(gameTime);
 				_enemy5.Update(gameTime);
+
+				MoveEnemyForward(gameTime);
 			}
 			else if (GameState == GameState.GameOver)
 			{
@@ -282,10 +288,29 @@ namespace JohnsJustice
 				if (_remainingVictoryDelay <= 0)
 				{
 					GameState = GameState.Credits;
-					_remainingVictoryDelay = 0;
+					_remainingVictoryDelay = _victoryDelay;
 				}				
 			}
 		}
+
+		private void CheckIfPlayerIsDead(GameTime gameTime)
+		{
+			if (_player.IsDead)
+			{
+				_healthText.Text = "You Lose!";
+
+				var timer = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+				_remainingVictoryDelay -= timer;
+
+				if (_remainingVictoryDelay <= 0)
+				{
+					GameState = GameState.GameOver;
+					_remainingVictoryDelay = _victoryDelay;
+				}
+			}
+		}
+
 
 		private void Reset()
 		{
@@ -302,11 +327,74 @@ namespace JohnsJustice
 			_enemy5.Reset(new Vector2(1000, PLAYER_START_POS_Y));
 		}
 
-		private void MoveEnemyForward()
+		private void MoveEnemyForward(GameTime gameTime)
 		{
-			// Pick enemy at random who is not in fight yet, or already moving or colliding with another enemy
-			// Move enemy towards player and trigger Moving animation
+			if (!_enemy.CanPunch && !_enemy.IsDead)
+			{
+				var timer = (float)gameTime.ElapsedGameTime.TotalSeconds;
+				_remainingEnemyMoveDelay -= timer;
+				if (_remainingEnemyMoveDelay <= 0)
+				{
+					_enemy.WalkLeft();
+					_remainingEnemyMoveDelay = _enemyMoveDelay;
+				}
 
+				return;
+			}
+
+			if (!_enemy2.CanPunch && !_enemy2.IsDead && _enemy.IsDead)
+			{
+				var timer = (float)gameTime.ElapsedGameTime.TotalSeconds;
+				_remainingEnemyMoveDelay -= timer;
+				if (_remainingEnemyMoveDelay <= 0)
+				{
+					_enemy2.WalkLeft();
+					_remainingEnemyMoveDelay = _enemyMoveDelay;
+				}
+
+				return;
+			}
+
+			if (!_enemy3.CanPunch && !_enemy3.IsDead && _enemy2.IsDead)
+			{
+				var timer = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+				_remainingEnemyMoveDelay -= timer;
+
+				if (_remainingEnemyMoveDelay <= 0)
+				{
+					_enemy3.WalkLeft();
+					_remainingEnemyMoveDelay = _enemyMoveDelay;
+				}
+
+				return;
+			}
+
+			if (!_enemy4.CanPunch && !_enemy4.IsDead && _enemy3.IsDead)
+			{
+				var timer = (float)gameTime.ElapsedGameTime.TotalSeconds;
+				_remainingEnemyMoveDelay -= timer;
+				if (_remainingEnemyMoveDelay <= 0)
+				{
+					_enemy4.WalkLeft();
+					_remainingEnemyMoveDelay = _enemyMoveDelay;
+				}
+
+				return;
+			}
+
+			if (!_enemy5.CanPunch && !_enemy5.IsDead && _enemy4.IsDead)
+			{
+				var timer = (float)gameTime.ElapsedGameTime.TotalSeconds;
+				_remainingEnemyMoveDelay -= timer;
+				if (_remainingEnemyMoveDelay <= 0)
+				{
+					_enemy5.WalkLeft();
+					_remainingEnemyMoveDelay = _enemyMoveDelay;
+				}
+
+				return;
+			}
 		}
 
 		private void player_HasDied(object sender, EventArgs e)

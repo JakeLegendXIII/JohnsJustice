@@ -49,7 +49,7 @@ namespace JohnsJustice.Entities
 
 		public bool IsDead = false;
 
-		public EventHandler OnDeath;
+		// public EventHandler OnDeath;
 
 		public PlayerState State { get; set; }
 
@@ -248,7 +248,7 @@ namespace JohnsJustice.Entities
 				if (!_koAnimation.IsPlaying)
 				{
 					IsDead = true;
-					OnDeath?.Invoke(this, EventArgs.Empty);
+					// OnDeath?.Invoke(this, EventArgs.Empty);
 				}
 			}
 		}

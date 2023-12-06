@@ -205,9 +205,12 @@ namespace JohnsJustice.Entities
 				{
 					if (PlayerCollision() && _hit.State != SoundState.Playing)
 					{
-						Player.Hurt(10);
+						if (!Player.IsDead)
+						{
+							Player.Hurt(10);
 
-						_hit.Play();
+							_hit.Play();
+						}						
 					}
 					else if (_miss.State != SoundState.Playing)
 					{
@@ -301,15 +304,10 @@ namespace JohnsJustice.Entities
 			return CollisionBox.Intersects(Player.CollisionBox);
 		}
 
-		public bool WalkLeft(GameTime gameTime)
+		public void WalkLeft()
 		{
 			State = EnemyState.Walking;
-			_walkingAnimation.Play();
-
-			Position = new Vector2(Position.X - 75 * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
-
-			return true;
-			
+			_walkingAnimation.Play();									
 		}
 
 	}
