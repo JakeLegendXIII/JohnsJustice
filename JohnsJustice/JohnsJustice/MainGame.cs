@@ -117,10 +117,10 @@ namespace JohnsJustice
 			var missInstance = _miss.CreateInstance();
 
 			_enemy = new Enemy(_enemySpriteSheet, new Vector2(300, PLAYER_START_POS_Y), hitInstance, missInstance);
-			_enemy2 = new Enemy(_enemy2SpriteSheet, new Vector2(550, PLAYER_START_POS_Y), hitInstance, missInstance);
-			_enemy3 = new Enemy(_enemySpriteSheet, new Vector2(750, PLAYER_START_POS_Y), hitInstance, missInstance);
-			_enemy4 = new Enemy(_enemy3SpriteSheet, new Vector2(950, PLAYER_START_POS_Y), hitInstance, missInstance);
-			_enemy5 = new Enemy(_enemy2SpriteSheet, new Vector2(1100, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy2 = new Enemy(_enemy2SpriteSheet, new Vector2(525, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy3 = new Enemy(_enemySpriteSheet, new Vector2(725, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy4 = new Enemy(_enemy3SpriteSheet, new Vector2(925, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy5 = new Enemy(_enemy2SpriteSheet, new Vector2(1075, PLAYER_START_POS_Y), hitInstance, missInstance);
 
 			_enemyList = new List<Enemy>
 			{
@@ -318,13 +318,13 @@ namespace JohnsJustice
 
 			_enemy.Reset(new Vector2(300, PLAYER_START_POS_Y));
 
-			_enemy2.Reset(new Vector2(550, PLAYER_START_POS_Y));
+			_enemy2.Reset(new Vector2(525, PLAYER_START_POS_Y));
 
-			_enemy3.Reset(new Vector2(750, PLAYER_START_POS_Y));
+			_enemy3.Reset(new Vector2(725, PLAYER_START_POS_Y));
 
-			_enemy4.Reset(new Vector2(950, PLAYER_START_POS_Y));
+			_enemy4.Reset(new Vector2(925, PLAYER_START_POS_Y));
 
-			_enemy5.Reset(new Vector2(1100, PLAYER_START_POS_Y));
+			_enemy5.Reset(new Vector2(1075, PLAYER_START_POS_Y));
 
 		}
 
