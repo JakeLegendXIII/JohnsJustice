@@ -20,7 +20,7 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/File.spritefont
 
-#begin Graphics/background.png
+#begin Graphics/bg.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -30,9 +30,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/background.png
+/build:Graphics/bg.png
 
-#begin Graphics/credits.png
+#begin Graphics/creditsscreen.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -42,9 +42,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/credits.png
+/build:Graphics/creditsscreen.png
 
-#begin Graphics/gameover.png
+#begin Graphics/game_over_jj.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -54,9 +54,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/gameover.png
+/build:Graphics/game_over_jj.png
 
-#begin Graphics/johnsjusticetitle.png
+#begin Graphics/titlesplash.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -66,7 +66,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/johnsjusticetitle.png
+/build:Graphics/titlesplash.png
 
 #begin Music/CircuitBreaker.wav
 /importer:WavImporter

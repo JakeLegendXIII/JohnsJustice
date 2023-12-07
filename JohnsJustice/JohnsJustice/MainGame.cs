@@ -22,14 +22,14 @@ namespace JohnsJustice
 		private const string HIT = "SFX/Hit";
 		private const string MISS = "SFX/Miss";
 		private const string TextFont = "Fonts/File";
-		private const string BACKGROUND = "Graphics/background";
-		private const string MENU_SCREEN = "Graphics/johnsjusticetitle";
-		private const string GAME_OVER_SCREEN = "Graphics/gameover";
-		private const string CREDIT_SCREEN = "Graphics/credits";
+		private const string BACKGROUND = "Graphics/bg";
+		private const string MENU_SCREEN = "Graphics/titlesplash";
+		private const string GAME_OVER_SCREEN = "Graphics/game_over_jj";
+		private const string CREDIT_SCREEN = "Graphics/creditsscreen";
 
-		public const int WINDOW_WIDTH = 1200; // 600
-		public const int WINDOW_HEIGHT = 300; // 150
-		public const int PLAYER_START_POS_Y = WINDOW_HEIGHT - 160;
+		public const int WINDOW_WIDTH = 1280; // 600
+		public const int WINDOW_HEIGHT = 720; // 150
+		public const int PLAYER_START_POS_Y = WINDOW_HEIGHT - 350;
 		public const int PLAYER_START_POS_X = 5;
 
 		public GameState GameState;
@@ -116,11 +116,11 @@ namespace JohnsJustice
 			var hitInstance = _hit.CreateInstance();
 			var missInstance = _miss.CreateInstance();
 
-			_enemy = new Enemy(_enemySpriteSheet, new Vector2(200, PLAYER_START_POS_Y), hitInstance, missInstance);
-			_enemy2 = new Enemy(_enemy2SpriteSheet, new Vector2(400, PLAYER_START_POS_Y), hitInstance, missInstance);
-			_enemy3 = new Enemy(_enemySpriteSheet, new Vector2(600, PLAYER_START_POS_Y), hitInstance, missInstance);
-			_enemy4 = new Enemy(_enemy3SpriteSheet, new Vector2(850, PLAYER_START_POS_Y), hitInstance, missInstance);
-			_enemy5 = new Enemy(_enemy2SpriteSheet, new Vector2(1000, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy = new Enemy(_enemySpriteSheet, new Vector2(400, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy2 = new Enemy(_enemy2SpriteSheet, new Vector2(700, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy3 = new Enemy(_enemySpriteSheet, new Vector2(900, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy4 = new Enemy(_enemy3SpriteSheet, new Vector2(1050, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy5 = new Enemy(_enemy2SpriteSheet, new Vector2(1250, PLAYER_START_POS_Y), hitInstance, missInstance);
 
 			_enemyList = new List<Enemy>
 			{

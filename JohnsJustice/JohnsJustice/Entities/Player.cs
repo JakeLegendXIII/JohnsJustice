@@ -59,7 +59,7 @@ namespace JohnsJustice.Entities
 		{
 			get
 			{
-				Rectangle box = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40 * 2, 55 * 2);
+				Rectangle box = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40 * 4, 55 * 4);
 
 				return box;
 			}

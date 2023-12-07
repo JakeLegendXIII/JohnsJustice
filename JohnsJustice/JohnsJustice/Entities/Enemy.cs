@@ -119,7 +119,7 @@ namespace JohnsJustice.Entities
 			_koAnimation.AddFrame(_hurtSprite4, 0.5f);
 			_koAnimation.Play();
 
-			CollisionBox = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40 * 2, 55 * 2);
+			CollisionBox = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40 * 4, 55 * 4);
 
 			//_texture = new Texture2D(spriteSheet.GraphicsDevice, 1, 1);
 			//_texture.SetData(new Color[] { Color.MonoGameOrange });
@@ -176,7 +176,7 @@ namespace JohnsJustice.Entities
 				{				
 					if (PlayerCollision())
 					{
-						if (_random.Next(0, 100) > 96)
+						if (_random.Next(0, 100) > 97)
 						{
 							State = EnemyState.Punching;
 							_punchAnimation.Play();

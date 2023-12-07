@@ -24,7 +24,7 @@ namespace JohnsJustice.Graphics
 
 		public void Draw(SpriteBatch spriteBatch, Vector2 position)
 		{
-			spriteBatch.Draw(Texture, new Rectangle((int)position.X, (int)position.Y, Width * 2, Height *2), new Rectangle(X, Y, Width, Height), Color.White);
+			spriteBatch.Draw(Texture, new Rectangle((int)position.X, (int)position.Y, Width * 4, Height *4), new Rectangle(X, Y, Width, Height), Color.White);
 		}
 	}
 }
