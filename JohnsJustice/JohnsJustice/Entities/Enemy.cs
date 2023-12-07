@@ -212,7 +212,7 @@ namespace JohnsJustice.Entities
 							_hit.Play();
 						}						
 					}
-					else if (_miss.State != SoundState.Playing)
+					else if (!PlayerCollision() && _miss.State != SoundState.Playing)
 					{
 						_miss.Play();
 					}

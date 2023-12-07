@@ -191,7 +191,7 @@ namespace JohnsJustice.Entities
 
 				if (_punchAnimation.CurrentFrame == _punchAnimation.GetFrame(2))
 				{
-					if (_hit.State != SoundState.Playing)
+					if (!NoEnemyCollissions() && _hit.State != SoundState.Playing)
 					{
 						foreach (var enemy in _enemies)
 						{
@@ -203,7 +203,7 @@ namespace JohnsJustice.Entities
 							}
 						}
 					}
-					else if (_miss.State != SoundState.Playing)
+					else if (NoEnemyCollissions() && _miss.State != SoundState.Playing)
 					{
 						_miss.Play();
 					}
@@ -251,7 +251,7 @@ namespace JohnsJustice.Entities
 					// OnDeath?.Invoke(this, EventArgs.Empty);
 				}
 			}
-		}
+		}	
 
 		public void Hurt(int damage)
 		{
@@ -305,7 +305,18 @@ namespace JohnsJustice.Entities
 			return false;
 		}
 
-
+		private bool NoEnemyCollissions()
+		{
+			foreach(var enemy in _enemies)
+			{
+				if (CollisionBox.Intersects(enemy.CollisionBox))
+				{					
+					return false;
+				}
+			}
+			
+			return true;
+		}
 
 		public bool BeginPunch()
 		{
