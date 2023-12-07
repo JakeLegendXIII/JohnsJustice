@@ -142,7 +142,7 @@ namespace JohnsJustice.Entities
 
 		public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
 		{
-			// spriteBatch.Draw(_texture, CollisionBox, Color.White);
+			//spriteBatch.Draw(_texture, CollisionBox, Color.White);
 
 			if (IsDead)
 			{

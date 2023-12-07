@@ -116,11 +116,11 @@ namespace JohnsJustice
 			var hitInstance = _hit.CreateInstance();
 			var missInstance = _miss.CreateInstance();
 
-			_enemy = new Enemy(_enemySpriteSheet, new Vector2(400, PLAYER_START_POS_Y), hitInstance, missInstance);
-			_enemy2 = new Enemy(_enemy2SpriteSheet, new Vector2(700, PLAYER_START_POS_Y), hitInstance, missInstance);
-			_enemy3 = new Enemy(_enemySpriteSheet, new Vector2(900, PLAYER_START_POS_Y), hitInstance, missInstance);
-			_enemy4 = new Enemy(_enemy3SpriteSheet, new Vector2(1050, PLAYER_START_POS_Y), hitInstance, missInstance);
-			_enemy5 = new Enemy(_enemy2SpriteSheet, new Vector2(1250, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy = new Enemy(_enemySpriteSheet, new Vector2(300, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy2 = new Enemy(_enemy2SpriteSheet, new Vector2(550, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy3 = new Enemy(_enemySpriteSheet, new Vector2(750, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy4 = new Enemy(_enemy3SpriteSheet, new Vector2(950, PLAYER_START_POS_Y), hitInstance, missInstance);
+			_enemy5 = new Enemy(_enemy2SpriteSheet, new Vector2(1100, PLAYER_START_POS_Y), hitInstance, missInstance);
 
 			_enemyList = new List<Enemy>
 			{
@@ -316,15 +316,16 @@ namespace JohnsJustice
 		{
 			_player.Reset(new Vector2(PLAYER_START_POS_X, PLAYER_START_POS_Y));
 
-			_enemy.Reset(new Vector2(200, PLAYER_START_POS_Y));
+			_enemy.Reset(new Vector2(300, PLAYER_START_POS_Y));
 
-			_enemy2.Reset(new Vector2(400, PLAYER_START_POS_Y));
+			_enemy2.Reset(new Vector2(550, PLAYER_START_POS_Y));
 
-			_enemy3.Reset(new Vector2(600, PLAYER_START_POS_Y));
+			_enemy3.Reset(new Vector2(750, PLAYER_START_POS_Y));
 
-			_enemy4.Reset(new Vector2(850, PLAYER_START_POS_Y));
+			_enemy4.Reset(new Vector2(950, PLAYER_START_POS_Y));
 
-			_enemy5.Reset(new Vector2(1000, PLAYER_START_POS_Y));
+			_enemy5.Reset(new Vector2(1100, PLAYER_START_POS_Y));
+
 		}
 
 		private void MoveEnemyForward(GameTime gameTime)

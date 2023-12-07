@@ -130,7 +130,7 @@ namespace JohnsJustice.Entities
 
 		public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
 		{
-			//spriteBatch.Draw(_texture, CollisionBox, Color.White);
+			// spriteBatch.Draw(_texture, CollisionBox, Color.White);
 
 			if (IsDead)
 			{
@@ -176,7 +176,7 @@ namespace JohnsJustice.Entities
 				{				
 					if (PlayerCollision())
 					{
-						if (_random.Next(0, 100) > 97)
+						if (_random.Next(0, 100) > 96)
 						{
 							State = EnemyState.Punching;
 							_punchAnimation.Play();
@@ -227,7 +227,7 @@ namespace JohnsJustice.Entities
 				if (!PlayerCollision())
 				{
 					Position = new Vector2(Position.X - 75 * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
-					CollisionBox = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40 * 2, 55 * 2);
+					CollisionBox = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40 * 4, 55 * 4);
 				}				
 
 				if (!_walkingAnimation.IsPlaying)
@@ -284,7 +284,7 @@ namespace JohnsJustice.Entities
 
 			_health = 100;
 
-			CollisionBox = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40 * 2, 55 * 2);
+			CollisionBox = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40 * 4, 55 * 4);
 
 			IsDead = false;
 			CanPunch = false;
