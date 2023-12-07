@@ -23,7 +23,7 @@ namespace JohnsJustice
 		private const string MISS = "SFX/Miss";
 		private const string TextFont = "Fonts/File";
 		private const string BACKGROUND = "Graphics/background";
-		private const string MENU_SCREEN = "Graphics/jjtitle2";
+		private const string MENU_SCREEN = "Graphics/johnsjusticetitle";
 		private const string GAME_OVER_SCREEN = "Graphics/gameover";
 		private const string CREDIT_SCREEN = "Graphics/credits";
 
