@@ -67,7 +67,7 @@ namespace JohnsJustice
 		private const float _victoryDelay = 3f;
 		private float _remainingVictoryDelay = _victoryDelay;
 
-		private const float _enemyMoveDelay = 9f;
+		private const float _enemyMoveDelay = 6f;
 		private float _remainingEnemyMoveDelay = _enemyMoveDelay;
 
 		public MainGame()
