@@ -39,7 +39,7 @@ namespace JohnsJustice.Entities
 		private SoundEffectInstance _hit;
 		private SoundEffectInstance _miss;
 
-		// private Texture2D _texture;
+		//private Texture2D _texture;
 
 		private List<Enemy> _enemies;
 
@@ -59,7 +59,7 @@ namespace JohnsJustice.Entities
 		{
 			get
 			{
-				Rectangle box = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40 * 4, 55 * 4);
+				Rectangle box = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 35 * 4, 55 * 4);
 
 				return box;
 			}

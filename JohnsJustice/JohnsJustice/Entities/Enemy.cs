@@ -85,10 +85,10 @@ namespace JohnsJustice.Entities
 			_punchAnimation.AddFrame(_punchSprite1, 0.8f);
 			_punchAnimation.Play();
 
-			_walkingSprite1 = new Sprite(spriteSheet, 415, 14, 35, 50);
-			_walkingSprite2 = new Sprite(spriteSheet, 512, 14, 35, 50);
-			_walkingSprite3 = new Sprite(spriteSheet, 608, 13, 35, 50);
-			_walkingSprite4 = new Sprite(spriteSheet, 705, 14, 35, 50);
+			_walkingSprite1 = new Sprite(spriteSheet, 411, 14, 35, 50);
+			_walkingSprite2 = new Sprite(spriteSheet, 506, 14, 35, 50);
+			_walkingSprite3 = new Sprite(spriteSheet, 604, 13, 35, 50);
+			_walkingSprite4 = new Sprite(spriteSheet, 700, 14, 35, 50);
 
 			_walkingAnimation = new SpriteAnimation();
 			_walkingAnimation.ShouldLoop = false;
@@ -119,7 +119,7 @@ namespace JohnsJustice.Entities
 			_koAnimation.AddFrame(_hurtSprite4, 0.5f);
 			_koAnimation.Play();
 
-			CollisionBox = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40 * 4, 55 * 4);
+			CollisionBox = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 35 * 4, 55 * 4);
 
 			//_texture = new Texture2D(spriteSheet.GraphicsDevice, 1, 1);
 			//_texture.SetData(new Color[] { Color.MonoGameOrange });
@@ -130,7 +130,7 @@ namespace JohnsJustice.Entities
 
 		public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
 		{
-			// spriteBatch.Draw(_texture, CollisionBox, Color.White);
+			//spriteBatch.Draw(_texture, CollisionBox, Color.White);
 
 			if (IsDead)
 			{
@@ -227,7 +227,7 @@ namespace JohnsJustice.Entities
 				if (!PlayerCollision())
 				{
 					Position = new Vector2(Position.X - 75 * (float)gameTime.ElapsedGameTime.TotalSeconds, Position.Y);
-					CollisionBox = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40 * 4, 55 * 4);
+					CollisionBox = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 35 * 4, 55 * 4);
 				}				
 
 				if (!_walkingAnimation.IsPlaying)
@@ -284,7 +284,7 @@ namespace JohnsJustice.Entities
 
 			_health = 100;
 
-			CollisionBox = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 40 * 4, 55 * 4);
+			CollisionBox = new Rectangle((int)Math.Round(Position.X), (int)Math.Round(Position.Y), 35 * 4, 55 * 4);
 
 			IsDead = false;
 			CanPunch = false;
