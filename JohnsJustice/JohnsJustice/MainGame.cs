@@ -194,6 +194,7 @@ namespace JohnsJustice
 		{
 			// GraphicsDevice.Clear(Color.CornflowerBlue);
 
+			 // _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 			_spriteBatch.Begin();
 
 			if (GameState == GameState.Menu)
